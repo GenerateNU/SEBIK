@@ -187,7 +187,7 @@
   )
 
   (footprint "MountingHole:MountingHole_4.3mm_M4" (layer "F.Cu")
-    (tedit 56D1B4CB) (tstamp 42589d9e-02db-4a0f-86dc-45d67956db2d)
+    (tedit 6538479B) (tstamp 42589d9e-02db-4a0f-86dc-45d67956db2d)
     (at 60.96 81.28)
     (descr "Mounting Hole 4.3mm, no annular, M4")
     (tags "mounting hole 4.3mm no annular m4")
@@ -209,7 +209,8 @@
     )
     (fp_circle (center 0 0) (end 4.3 0) (layer "Cmts.User") (width 0.15) (fill none) (tstamp 6fa4109b-c555-499a-bf1c-bfda02df69f7))
     (fp_circle (center 0 0) (end 4.55 0) (layer "F.CrtYd") (width 0.05) (fill none) (tstamp 12654ddc-687c-45df-ad43-344702855718))
-    (pad "" np_thru_hole circle locked (at 0 0) (size 4.3 4.3) (drill 4.3) (layers *.Cu *.Mask) (tstamp 3dd1ffc7-9f12-4220-ba88-bbc79f83a4c9))
+    (pad "" np_thru_hole circle locked (at 0 0) (size 4.3 4.3) (drill 4.3) (layers F&B.Cu *.Mask)
+      (zone_connect 2) (tstamp 3dd1ffc7-9f12-4220-ba88-bbc79f83a4c9))
   )
 
   (footprint "LED_SMD:LED_0805_2012Metric" (layer "F.Cu")
@@ -415,7 +416,7 @@
   )
 
   (footprint "MountingHole:MountingHole_4.3mm_M4" (layer "F.Cu")
-    (tedit 56D1B4CB) (tstamp bb23a819-f910-41fb-89a6-9724f9dba25c)
+    (tedit 653847D7) (tstamp bb23a819-f910-41fb-89a6-9724f9dba25c)
     (at 60.96 96.52)
     (descr "Mounting Hole 4.3mm, no annular, M4")
     (tags "mounting hole 4.3mm no annular m4")
@@ -437,7 +438,8 @@
     )
     (fp_circle (center 0 0) (end 4.3 0) (layer "Cmts.User") (width 0.15) (fill none) (tstamp 857dc3b7-b18c-442c-8f20-f3979db07949))
     (fp_circle (center 0 0) (end 4.55 0) (layer "F.CrtYd") (width 0.05) (fill none) (tstamp 4064bff9-0e7c-4f8c-ad9a-55792b0eb7f7))
-    (pad "" np_thru_hole circle locked (at 0 0) (size 4.3 4.3) (drill 4.3) (layers *.Cu *.Mask) (tstamp 85ff1aa3-2715-4ec5-bd59-a3d9452d4eed))
+    (pad "" np_thru_hole circle locked (at 0 0) (size 4.3 4.3) (drill 4.3) (layers F&B.Cu *.Mask)
+      (zone_connect 2) (tstamp 85ff1aa3-2715-4ec5-bd59-a3d9452d4eed))
   )
 
   (footprint "MountingHole:MountingHole_4.3mm_M4" (layer "F.Cu")
