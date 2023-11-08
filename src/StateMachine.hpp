@@ -1,8 +1,10 @@
 #ifndef STATEMACHINE_HPP
 #define STATEMACHINE_HPP
 
+#include <Arduino.h>
 #include "Errors.hpp"
 #include "Ui.hpp"
+#include "Init.hpp"
 
 enum States
 {
@@ -12,7 +14,8 @@ enum States
     HEATING,
     INJECTING,
     EJECTING,
-    FINSHED    
+    FINSHED,
+    HARD_STOP    
 };
 
 class StateMachineHandler
@@ -56,6 +59,16 @@ class StateMachineHandler
 
         //TODO: FINISHED method
         void Finish();
+
+        void GetPressureReading();
+
+        void GetTempReading(int pin);
+
+        bool IsPlasticSafeToTouch();
+
+        void PowerOff();
+
+        void TurnOffHeater();
 };
 
 #endif

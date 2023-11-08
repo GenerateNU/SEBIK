@@ -1,6 +1,8 @@
 #ifndef UI_HPP
 #define UI_HPP
 
+#include "Arduino.h"
+
 enum UiState
 {
     START_BUTTON_PRESSED,
@@ -28,10 +30,12 @@ class UiHandler
         ~UiHandler();
 
         //TODO: StartButtonPressed
-        void StartButtonPressed();
+        bool IsStartButtonPressed();
 
         //TODO: HardStopButtonPressed
-        void HardStopButtonPressed();
+        bool IsHardStopButtonPressed();
+
+        void PlaySpeaker();
 
         //TODO: HighTempLEDOn
         void HighTempLEDOn();

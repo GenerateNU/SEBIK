@@ -12,110 +12,142 @@ StateMachineHandler::~StateMachineHandler()
 
 void StateMachineHandler::MainStateMachine()
 {
+    m_errorHandler.HandleOverheat();
     switch(m_currentEvent)
     {
         case AIR_PUMP:
             AirPump();
-            Update(States::CLAMPING);
             break;
         case CLAMPING:
             Clamping();
-            Update(States::PLASTIC_DISPENSES);
             break;
         case PLASTIC_DISPENSES:
             PlasticDispense();
-            Update(States::HEATING);
             break;
         case HEATING:
             Heating();
-            Update(States::INJECTING);
             break;
         case INJECTING:
             Injecting();
-            Update(States::EJECTING);
             break;
         case EJECTING:
             Unclamping();
-            Update(States::FINSHED);
             break;
         case FINSHED:
             Finish();
-            Update(States::AIR_PUMP);
+            break;
+        default:
             break;
     }
 }
 
+// Updates the current state
 void StateMachineHandler::Update(States state)
 {  
     m_currentEvent = state;
 }
 
-//TODO: START method
+// Initializes the first state in void setup()
 void StateMachineHandler::Start()
 {
-    //If start sequence then statemachine
-
-    //Update UI
-    m_uiHandler.InProgressLEDOn();
-    Update(States::AIR_PUMP);
-
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    if (m_uiHandler.IsStartButtonPressed())
+    {
+        m_uiHandler.InProgressLEDOn();
+        m_uiHandler.PlaySpeaker();
+        //If start sequence then statemachine
+        // Change Update parameter if you want to test a specific state
+        Update(States::AIR_PUMP);
+    }
 }
 
-//TODO: AIR_PUMP method
+// Turns on the air pump
 void StateMachineHandler::AirPump()
-{
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+{   
+    Update(States::CLAMPING);
+
 }
 
-//TODO: CLAMPING method
+// Clamps the mold
 void StateMachineHandler::Clamping()
 {
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    Update(States::PLASTIC_DISPENSES);
 }
 
-//TODO: PLASTIC_DISPENSE method
+// Dispenses plastic
 void StateMachineHandler::PlasticDispense()
 {
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    Update(States::HEATING);
 }
 
-//TODO: HEATING method
+// Starts the heating process
 void StateMachineHandler::Heating()
 {
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    Update(States::INJECTING);
 }
 
-//TODO: INJECTING method
+// Turns off the heater
+void StateMachineHandler::TurnOffHeater()
+{
+
+}
+
+// Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    Update(States::EJECTING);
 }
 
-//TODO: UNCLAMPING method
+// Unclamps mold
 void StateMachineHandler::Unclamping()
 {
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    digitalWrite(EjectionPin);
+    Update(States::FINISHED);
 }
 
-//TODO: FINISHED method
+// Finishing procedure
 void StateMachineHandler::Finish()
 {
-    // Check for errors
-    m_errorHandler.HandleOverheat();
-    m_errorHandler.HandleOverpressure();
+    if (IsPlasticSafeToTouch())
+    {
+        m_uiHandler.CompleteLEDOn();
+        delay(3000);
+        m_uiHandler.CompleteLEDOff();
+        Update(States::CLAMPING);
+    }
+}
+
+// Gets the temperature reading from the specified pin
+int StateMachineHandler::GetTempReading(int pin)
+{
+    int tempReading = analogRead(pin);
+    return tempReading;
+}
+
+// Gets the load cell reading 
+void StateMachineHandler::LoadCellReading()
+{
+    scale.set_scale(calibration_factor); //Adjust to this calibration factor
+
+    Serial.print("Reading: ");
+    Serial.print((scale.get_units())* 453.592, 3);
+    Serial.print(" g"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
+    Serial.print(" calibration_factor: ");
+    Serial.print(calibration_factor);
+    Serial.println();
+
+    if(Serial.available())
+    {
+        char temp = Serial.read();
+        if(temp == '+' || temp == 'a')
+        calibration_factor += 10;
+        else if(temp == '-' || temp == 'z')
+        calibration_factor -= 10;
+    }
+}
+
+// Checks if the plastic is safe to touch
+bool StateMachineHandler::IsPlasticSafeToTouch()
+{
+    m_EjectionTempReading = analogRead(ejectionTempPin);
+    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
 }
