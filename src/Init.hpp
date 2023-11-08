@@ -5,6 +5,7 @@
 #include "HX711.h"
 #include <Adafruit_MCP23X08.h>
 #include <Adafruit_MCP23X17.h>
+#include "StateMachine.hpp"
 
 #define START_PUSHBUTTON B0
 #define SPEAKER B1

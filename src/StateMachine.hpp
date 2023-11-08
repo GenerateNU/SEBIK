@@ -62,7 +62,7 @@ class StateMachineHandler
 
         void GetPressureReading();
 
-        void GetTempReading(int pin);
+        //void GetTempReading(int pin);
 
         bool IsPlasticSafeToTouch();
 
