@@ -1,7 +1,6 @@
 #ifndef ERRORS_HPP
 #define ERRORS_HPP
 
-#include "Ui.hpp"
 #include "Init.hpp"
 
 enum Errors
