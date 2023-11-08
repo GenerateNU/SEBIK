@@ -1,7 +1,6 @@
 #ifndef UI_HPP
 #define UI_HPP
 
-#include "Arduino.h"
 #include "Init.hpp"
 
 enum UiState

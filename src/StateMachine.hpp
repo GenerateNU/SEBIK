@@ -1,9 +1,6 @@
 #ifndef STATEMACHINE_HPP
 #define STATEMACHINE_HPP
 
-#include <Arduino.h>
-#include "Errors.hpp"
-#include "Ui.hpp"
 #include "Init.hpp"
 
 enum States
@@ -62,7 +59,9 @@ class StateMachineHandler
 
         void GetPressureReading();
 
-        //void GetTempReading(int pin);
+        int GetTempReading(int pin);
+        
+        void LoadCellReading();
 
         bool IsPlasticSafeToTouch();
 
