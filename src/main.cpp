@@ -1,7 +1,5 @@
 #include "StateMachine.hpp"
 #include <Arduino.h>
-#include <Adafruit_MCP23X08.h>
-#include <Adafruit_MCP23X17.h>
 
 
 #define BAUD_RATE 115200
@@ -27,7 +25,7 @@ void setup()
     // pinMode(heaterRelay_O, OUTPUT);
     // pinMode(ejectionSolenoid_O, OUTPUT);
 
-    // Serial.begin(9600);
+    Serial.begin(9600);
 
     // Load Cell setup
     // scale.begin(DOUT, CLK);
@@ -36,7 +34,8 @@ void setup()
     // long zero_factor = scale.read_average(); //Get a baseline reading
     // Serial.print("Zero factor: "); //This can be used to remove the need to tare the scale. Useful in permanent scale projects.
     // Serial.println(zero_factor);
-
+    gpioExpander.begin_I2C();
+    InitializePins();
     stateMachineHandler.Start();
 }
 

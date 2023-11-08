@@ -2,11 +2,11 @@
 #define UI_HPP
 
 #include "Arduino.h"
+#include "Init.hpp"
 
 enum UiState
 {
     START_BUTTON_PRESSED,
-    // HARD_STOP_BUTTON_PRESSED,
     HIGH_TEMP_LED_ON,
     HIGH_TEMP_LED_OFF,
     LOW_TEMP_LED_ON,

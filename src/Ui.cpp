@@ -11,73 +11,72 @@ UiHandler::~UiHandler()
 //TODO: StartButtonPressed
 bool UiHandler::IsStartButtonPressed()
 {
-    return (digitalRead(buttonOnePin) == HIGH) && (digitalRead(buttonTwoPin) == HIGH);
+    return gpioExpander.digitalRead(START_BUTTON_PRESSED) == HIGH;
 }
 
 void UiHandler::PlaySpeaker()
 {
-    digitalWrite(SpeakerPin, HIGH);
+    gpioExpander.digitalWrite(SPEAKER, HIGH);
     delay(3000);
-    digitalWrite(SpeakerPin, LOW);
-
+    gpioExpander.digitalWrite(SPEAKER, LOW);
 }
 
 //TODO: HighTempLEDOn
 void UiHandler::HighTempLEDOn()
 {
-    digitalWrite(highTempLED, HIGH);
+    gpioExpander.digitalWrite(HIGH_TEMP_LED, HIGH);
 }
 
 //TODO: HighTempLEDOff
 void UiHandler::HighTempLEDOff()
 {
-    digitalWrite(highTempLED, LOW);
+    gpioExpander.digitalWrite(HIGH_TEMP_LED, LOW);
 }
 
 //TODO: LowTempLEDOn
 void UiHandler::LowTempLEDOn()
 {
-    digitalWrite(lowTempLED, HIGH);
+    gpioExpander.digitalWrite(LOW_TEMP_LED, HIGH);
 }
 
 //TODO: LowTempLEDOff
 void UiHandler::LowTempLEDOff()
 {
-    digitalWrite(lowTempLED, LOW);
+    gpioExpander.digitalWrite(LOW_TEMP_LED, LOW);
 }
 
 //TODO: HighPressureLEDOn
 void UiHandler::HighPressureLEDOn()
 {
-    digitalWrite(highPressureLED, HIGH);
+    gpioExpander.digitalWrite(HIGH_PRESSURE_LED, HIGH);
 }
 
 //TODO: HighPressureLEDOff
 void UiHandler::HighPressureLEDOff()
 {
-    digitalWrite(highPressureLED, LOW);
+    gpioExpander.digitalWrite(HIGH_PRESSURE_LED, LOW);
 }
 
 //TODO: InProgressLEDOn
 void UiHandler::InProgressLEDOn()
 {
-    digitalWrite(inProgressLED, HIGH);
+    gpioExpander.digitalWrite(IN_PROGRESS_LED, HIGH);
 }
 
 //TODO: InProgressLEDOff
 void UiHandler::InProgressLEDOff()
 {
-    digitalWrite(inProgressLED, LOW);
+    gpioExpander.digitalWrite(IN_PROGRESS_LED, LOW);
 }
 
 //TODO: CompleteLEDOn
 void UiHandler::CompleteLEDOn()
 {
-    digitalWrite(completeLED, HIGH);
+    gpioExpander.digitalWrite(COMPLETE_LED, HIGH);
 }
 
 //TODO: CompleteLEDOff
 void UiHandler::CompleteLEDOff()
 {
-    digitalWrite(completeLED, HIGH);
+    gpioExpander.digitalWrite(COMPLETE_LED, LOW);
 }
