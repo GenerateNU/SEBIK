@@ -2,6 +2,7 @@
 #define ERRORS_HPP
 
 #include "Ui.hpp"
+#include "Init.hpp"
 
 enum Errors
 {
@@ -19,8 +20,8 @@ class ErrorHandler
 
         ~ErrorHandler();
 
-        //TODO: handleOverpressure
-        void HandleOverpressure();
+        // //TODO: handleOverpressure
+        // void HandleOverpressure();
 
         //TODO: handleOverheat
         void HandleOverheat();
