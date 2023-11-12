@@ -2,6 +2,7 @@
 #define INIT_H
 
 #include <Arduino.h>
+#include <avr/wdt.h>
 #include "HX711.h"
 #include <Adafruit_MCP23X08.h>
 #include <Adafruit_MCP23X17.h>
@@ -9,19 +10,48 @@
 #include "Ui.hpp"
 #include "Errors.hpp"
 
-#define START_PUSHBUTTON B0
-#define SPEAKER B1
-#define HIGH_TEMP_LED A0
-#define IN_PROGRESS_LED A1
-#define LOW_TEMP_LED A2
-#define HIGH_PRESSURE_LED A3
-#define COMPLETE_LED
+// Crystal Oscillator
+#define F_CPU 16000000UL
 
-#define MISO B4
-#define SCK B5
-#define TEMP_SENSOR1 B2
-#define TEMP_SENSOR2 B1
-#define TEMP_SENSOR3 D6
+// UI pins
+#define START_PUSHBUTTON_E 8
+#define SPEAKER_E 9
+#define HIGH_TEMP_LED_E 0
+#define IN_PROGRESS_LED_E 1
+#define LOW_TEMP_LED_E 2
+#define HIGH_PRESSURE_LED_E 3
+#define COMPLETE_LED_E 4
+//#define HARD_STOP_BUTTON_E 7
+
+// Solenoid pins
+#define INJECTION_SOLENOID 8
+#define EJECTION_SOLENOID 7
+#define BALL_VALVE_SOLENOID_E 11
+#define EJECTION_CYLINDER_SOLENOID_E 12
+
+// SPI
+#define MISO 12
+#define MOSI 11
+#define SCK 13
+
+// Sensor pins
+#define TEMP_SENSOR1 10
+#define TEMP_SENSOR2 9
+#define TEMP_SENSOR3 6
+#define INJECTION_SENSOR 17
+#define EJECTION_SENSOR 16
+#define LOAD_CELL_SENSOR1 5
+#define LOAD_CELL_SENSOR2 4
+#define LOAD_CELL_SENSOR3 2
+
+// Relays
+#define HARD_STOP_RELAY_E 10
+#define HEATER_RELAY 3
+
+#define EXTRA1 14
+#define EXTRA2 15
+
+#define WATCHDOG_TIMEOUT WDTO_8S
 
 const int HIGH_TEMP_IN_CELSIUS = 175;
 const int OPTIMAL_TEMP_IN_CELSIUS = 165;
@@ -33,7 +63,6 @@ const int HIGH_PRESSURE_IN_PSI = 100;
 const int OPTIMAL_PRESSURE_IN_PSI = 90; 
 const int LOW_PRESSURE_IN_PSI = 80;
 
-#define pressureInput = A0; // input pin for pressure sensor
 const int PRESSURE_ZERO = 102.4; // analog read of pressure sensor at 0 psi
 const int PRESSURE_MAX = 512;// analog read of pressure sensor at 100 psi
 const int MAX_PSI = 100; // psi value of pressure sensor
@@ -48,13 +77,35 @@ Adafruit_MCP23X17 gpioExpander;
 
 static void InitializePins()
 {
-    gpioExpander.pinMode(START_PUSHBUTTON, INPUT);
-    gpioExpander.pinMode(SPEAKER, OUTPUT);
-    gpioExpander.pinMode(HIGH_TEMP_LED, OUTPUT);
-    gpioExpander.pinMode(IN_PROGRESS_LED, OUTPUT);
-    gpioExpander.pinMode(LOW_TEMP_LED, OUTPUT);
-    gpioExpander.pinMode(HIGH_PRESSURE_LED, OUTPUT);
+    //NOTE: TEMPORARILY MADE ALL PINS OUTPUT FOR HARDWARE TESTING
+    // GPIO expander pinmodes
+    gpioExpander.pinMode(START_PUSHBUTTON_E, OUTPUT);
+    gpioExpander.pinMode(SPEAKER_E, OUTPUT);
+    gpioExpander.pinMode(HIGH_TEMP_LED_E, OUTPUT);
+    gpioExpander.pinMode(IN_PROGRESS_LED_E, OUTPUT);
+    gpioExpander.pinMode(LOW_TEMP_LED_E, OUTPUT);
+    gpioExpander.pinMode(HIGH_PRESSURE_LED_E, OUTPUT);
+    gpioExpander.pinMode(COMPLETE_LED_E, OUTPUT);
+    gpioExpander.pinMode(BALL_VALVE_SOLENOID_E, OUTPUT);
+    gpioExpander.pinMode(EJECTION_CYLINDER_SOLENOID_E, OUTPUT);
+    gpioExpander.pinMode(HARD_STOP_RELAY_E, OUTPUT);
 
+    pinMode(INJECTION_SOLENOID, OUTPUT);
+    pinMode(EJECTION_SOLENOID, OUTPUT);
+    pinMode(MISO, OUTPUT);
+    pinMode(MOSI, OUTPUT);
+    pinMode(SCK, OUTPUT);
+    pinMode(TEMP_SENSOR1, OUTPUT);
+    pinMode(TEMP_SENSOR2, OUTPUT);
+    pinMode(TEMP_SENSOR3, OUTPUT);
+    pinMode(INJECTION_SENSOR, OUTPUT);
+    pinMode(EJECTION_SENSOR, OUTPUT);
+    pinMode(LOAD_CELL_SENSOR1, OUTPUT);
+    pinMode(LOAD_CELL_SENSOR2, OUTPUT);
+    pinMode(LOAD_CELL_SENSOR3, OUTPUT);
+    pinMode(HEATER_RELAY, OUTPUT);
+    pinMode(EXTRA1, OUTPUT);
+    pinMode(EXTRA2, OUTPUT);
 }
 
 #endif
