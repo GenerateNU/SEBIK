@@ -50,14 +50,44 @@ void StateMachineHandler::Update(States state)
 // Initializes the first state in void setup()
 void StateMachineHandler::Start()
 {
-    if (m_uiHandler.IsStartButtonPressed())
-    {
-        m_uiHandler.InProgressLEDOn();
-        m_uiHandler.PlaySpeaker();
-        //If start sequence then statemachine
-        // Change Update parameter if you want to test a specific state
-        Update(States::AIR_PUMP);
-    }
+    // NOTE: TEMPORARILY FOR HARDWARE TESTING
+    gpioExpander.digitalWrite(START_PUSHBUTTON_E, HIGH);
+    gpioExpander.digitalWrite(SPEAKER_E, HIGH);
+    gpioExpander.digitalWrite(HIGH_TEMP_LED_E, HIGH);
+    gpioExpander.digitalWrite(IN_PROGRESS_LED_E, HIGH);
+    gpioExpander.digitalWrite(LOW_TEMP_LED_E, HIGH);
+    gpioExpander.digitalWrite(HIGH_PRESSURE_LED_E, HIGH);
+    gpioExpander.digitalWrite(COMPLETE_LED_E, HIGH);
+    gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
+    gpioExpander.digitalWrite(EJECTION_CYLINDER_SOLENOID_E, HIGH);
+    gpioExpander.digitalWrite(HARD_STOP_RELAY_E, HIGH);
+
+    digitalWrite(INJECTION_SOLENOID, HIGH);
+    digitalWrite(EJECTION_SOLENOID, HIGH);
+    digitalWrite(MISO, HIGH);
+    digitalWrite(MOSI, HIGH);
+    digitalWrite(SCK, HIGH);
+    digitalWrite(TEMP_SENSOR1, HIGH);
+    digitalWrite(TEMP_SENSOR2, HIGH);
+    digitalWrite(TEMP_SENSOR3, HIGH);
+    digitalWrite(INJECTION_SENSOR, HIGH);
+    digitalWrite(EJECTION_SENSOR, HIGH);
+    digitalWrite(LOAD_CELL_SENSOR1, HIGH);
+    digitalWrite(LOAD_CELL_SENSOR2, HIGH);
+    digitalWrite(LOAD_CELL_SENSOR3, HIGH);
+    digitalWrite(HEATER_RELAY, HIGH);
+    digitalWrite(EXTRA1, HIGH);
+    digitalWrite(EXTRA2, HIGH);
+
+
+    // if (m_uiHandler.IsStartButtonPressed())
+    // {
+    //     m_uiHandler.InProgressLEDOn();
+    //     m_uiHandler.PlaySpeaker();
+    //     //If start sequence then statemachine
+    //     // Change Update parameter if you want to test a specific state
+    //     Update(States::AIR_PUMP);
+    // }
 }
 
 // Turns on the air pump
@@ -100,8 +130,8 @@ void StateMachineHandler::Injecting()
 // Unclamps mold
 void StateMachineHandler::Unclamping()
 {
-    digitalWrite(EjectionPin);
-    Update(States::FINISHED);
+    digitalWrite(EJECTION_CYLINDER_SOLENOID_E, HIGH);
+    Update(States::FINSHED);
 }
 
 // Finishing procedure

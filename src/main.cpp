@@ -5,24 +5,11 @@
 
 void setup()
 {
-    // pinMode(temp2_I, INPUT);
-    // pinMode(temp1_I, INPUT);
-    // pinMode(clock_I, INPUT);
-    // pinMode(ejectionPressure_I, INPUT);
-    // pinMode(injectionPressure_I, INPUT);
-    // pinMode(SDA_I, INPUT);
-    // pinMode(reset_I, INPUT);
-    // pinMode(RX_I, INPUT);
-    // pinMode(temp3_I, INPUT);
-    // pinMode(injectionSolenoid_O, OUTPUT);
-    // pinMode(MISO_O, OUTPUT);
-    // pinMode(SCK_O, OUTPUT);
-    // pinMode(clock_O, OUTPUT);
-    //pinMode(SDA_O, OUTPUT);
-    // pinMode(gpioExpanderSCK_O, OUTPUT);
-    // pinMode(TX_O, OUTPUT);
-    // pinMode(heaterRelay_O, OUTPUT);
-    // pinMode(ejectionSolenoid_O, OUTPUT);
+    InitializePins();
+    gpioExpander.begin_I2C();
+    wdt_disable();
+    delay(3000);
+    wdt_enable(WATCHDOG_TIMEOUT);
 
     Serial.begin(9600);
 
@@ -33,14 +20,13 @@ void setup()
     // long zero_factor = scale.read_average(); //Get a baseline reading
     // Serial.print("Zero factor: "); //This can be used to remove the need to tare the scale. Useful in permanent scale projects.
     // Serial.println(zero_factor);
-    gpioExpander.begin_I2C();
-    InitializePins();
     stateMachineHandler.Start();
 }
 
 void loop()
 {
     stateMachineHandler.MainStateMachine();
+    wdt_reset();
     //stateMachineHandler.PressureReading();
 }
 
