@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 #include <avr/wdt.h>
+#include <SPI.h>
 #include "HX711.h"
-#include <Adafruit_MCP23X08.h>
 #include <Adafruit_MCP23X17.h>
 #include "StateMachine.hpp"
 #include "Ui.hpp"
@@ -68,12 +68,11 @@ const int PRESSURE_MAX = 512;// analog read of pressure sensor at 100 psi
 const int MAX_PSI = 100; // psi value of pressure sensor
 const int SENSOR_READ_DELAY= 250; // sensor read delay
 
-#define DOUT  3
-#define CLK  2
 float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 
 StateMachineHandler stateMachineHandler;
 Adafruit_MCP23X17 gpioExpander;
+HX711 scale;
 
 static void InitializePins()
 {

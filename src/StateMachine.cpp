@@ -149,13 +149,17 @@ void StateMachineHandler::Finish()
 // Gets the temperature reading from the specified pin
 int StateMachineHandler::GetTempReading(int pin)
 {
-    int tempReading = analogRead(pin);
-    return tempReading;
+    // SPI stuff for temp/load cell
+    digitalWrite(pin, LOW);
+    
+    digitalWrite(pin, HIGH);
+
 }
 
 // Gets the load cell reading 
 void StateMachineHandler::LoadCellReading()
 {
+    scale.begin(MISO, SCK);
     scale.set_scale(calibration_factor); //Adjust to this calibration factor
 
     Serial.print("Reading: ");
