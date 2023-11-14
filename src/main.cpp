@@ -6,12 +6,14 @@
 void setup()
 {
     InitializePins();
-    gpioExpander.begin_I2C();
     wdt_disable();
     delay(3000);
     wdt_enable(WATCHDOG_TIMEOUT);
 
     Serial.begin(9600);
+    gpioExpander.begin_I2C();
+    SPI.begin();
+    SPI.setClockDivider(SPI_CLOCK_DIV8);
 
     // Load Cell setup
     // scale.begin(DOUT, CLK);
