@@ -13,7 +13,7 @@ StateMachineHandler::~StateMachineHandler()
 void StateMachineHandler::MainStateMachine()
 {
     m_errorHandler.HandleOverheat();
-    switch(m_currentEvent)
+    switch(m_currentState)
     {
         case AIR_PUMP:
             AirPump();
@@ -93,8 +93,8 @@ void StateMachineHandler::Start()
 // Turns on the air pump
 void StateMachineHandler::AirPump()
 {   
+    // if desired pressure 
     Update(States::CLAMPING);
-
 }
 
 // Clamps the mold
@@ -106,7 +106,10 @@ void StateMachineHandler::Clamping()
 // Dispenses plastic
 void StateMachineHandler::PlasticDispense()
 {
-    Update(States::HEATING);
+    // if (readWeight and it is below optimal weight)
+    // dispense plastic
+    // else
+        Update(States::HEATING);
 }
 
 // Starts the heating process
@@ -140,7 +143,7 @@ void StateMachineHandler::Finish()
     if (IsPlasticSafeToTouch())
     {
         m_uiHandler.CompleteLEDOn();
-        delay(3000);
+        delay(1000);
         m_uiHandler.CompleteLEDOff();
         Update(States::CLAMPING);
     }
@@ -149,39 +152,35 @@ void StateMachineHandler::Finish()
 // Gets the temperature reading from the specified pin
 int StateMachineHandler::GetTempReading(int pin)
 {
-    // SPI stuff for temp/load cell
-    digitalWrite(pin, LOW);
-    
-    digitalWrite(pin, HIGH);
 
 }
 
 // Gets the load cell reading 
 void StateMachineHandler::LoadCellReading()
 {
-    scale.begin(MISO, SCK);
-    scale.set_scale(calibration_factor); //Adjust to this calibration factor
+    // scale.begin(MISO, SCK);
+    // scale.set_scale(calibration_factor); //Adjust to this calibration factor
 
-    Serial.print("Reading: ");
-    Serial.print((scale.get_units())* 453.592, 3);
-    Serial.print(" g"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
-    Serial.print(" calibration_factor: ");
-    Serial.print(calibration_factor);
-    Serial.println();
+    // Serial.print("Reading: ");
+    // Serial.print((scale.get_units())* 453.592, 3);
+    // Serial.print(" g"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
+    // Serial.print(" calibration_factor: ");
+    // Serial.print(calibration_factor);
+    // Serial.println();
 
-    if(Serial.available())
-    {
-        char temp = Serial.read();
-        if(temp == '+' || temp == 'a')
-        calibration_factor += 10;
-        else if(temp == '-' || temp == 'z')
-        calibration_factor -= 10;
-    }
+    // if(Serial.available())
+    // {
+    //     char temp = Serial.read();
+    //     if(temp == '+' || temp == 'a')
+    //     calibration_factor += 10;
+    //     else if(temp == '-' || temp == 'z')
+    //     calibration_factor -= 10;
+    // }
 }
 
 // Checks if the plastic is safe to touch
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
     m_EjectionTempReading = analogRead(ejectionTempPin);
-    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
+    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }

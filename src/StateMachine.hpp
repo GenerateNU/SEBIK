@@ -18,7 +18,7 @@ enum States
 class StateMachineHandler
 {
     private:
-        enum States m_currentEvent;
+        enum States m_currentState;
         
     public:
         static ErrorHandler m_errorHandler;
