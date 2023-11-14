@@ -125,6 +125,11 @@ void StateMachineHandler::TurnOffHeater()
 void StateMachineHandler::Injecting()
 {
     Update(States::EJECTING);
+    digitalWrite(INJECTION_SOLENOID, HIGH);
+    if (GetPressureReading() <= OPTIMAL_PRESSURE_IN_PSI)
+    {
+
+    }
 }
 
 // Unclamps mold
@@ -185,3 +190,14 @@ bool StateMachineHandler::IsPlasticSafeToTouch()
     m_EjectionTempReading = analogRead(ejectionTempPin);
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
 }
+
+int GetPressureReading() 
+{
+    float currentPressureValue = analogRead(INJECTION_SENSOR);
+    currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
+    //Serial.print(currentPressureValue, 1);
+    //Serial.println(“PSI: “);
+    //delay(SENSOR_READ_DELAY);
+    return currentPressureValue;
+}
+
