@@ -34,3 +34,13 @@ void ErrorHandler::HandleOverheat()
         UiHandler.HighTempLEDOff();
     }
 }
+
+void ErrorHandler::HandleUnderPressure()
+{
+    do
+    {
+        //stateMachineHandler.TurnOnAirPump();
+        //needs to update the pressure sensor value here
+    } while (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
+    //stateMachineHandler.TurnOffAirPump();
+}

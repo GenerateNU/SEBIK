@@ -59,6 +59,8 @@ class StateMachineHandler
 
         float GetPressureReading();
 
+        void PushPneumaticCylinder();
+
         int GetTempReading(int pin);
         
         void LoadCellReading();
