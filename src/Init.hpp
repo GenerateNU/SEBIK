@@ -4,8 +4,10 @@
 #include <Arduino.h>
 #include <avr/wdt.h>
 #include <SPI.h>
+#include <PID_v1.h>
 #include "HX711.h"
 #include <Adafruit_MCP23X17.h>
+#include "Adafruit_MAX31855.h"
 #include "StateMachine.hpp"
 #include "Ui.hpp"
 #include "Errors.hpp"
@@ -35,7 +37,7 @@
 #define SCK 13
 
 // Sensor pins
-#define TEMP_SENSOR1 10
+#define TEMP_SENSOR1 10 
 #define TEMP_SENSOR2 9
 #define TEMP_SENSOR3 6
 #define INJECTION_SENSOR 17
@@ -55,7 +57,7 @@
 
 const int HIGH_TEMP_IN_CELSIUS = 175;
 const int OPTIMAL_TEMP_IN_CELSIUS = 165;
-const int LOW_TEMP_IN_CELSIUS = 175;
+const int LOW_TEMP_IN_CELSIUS = 160;
 
 const int SAFE_TEMP_TO_TOUCH_IN_CELSIUS = 40;
 
@@ -73,6 +75,9 @@ float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 StateMachineHandler stateMachineHandler;
 Adafruit_MCP23X17 gpioExpander;
 HX711 scale;
+Adafruit_MAX31855 thermocouple1(SCK, TEMP_SENSOR1, MISO);
+Adafruit_MAX31855 thermocouple2(SCK, TEMP_SENSOR2, MISO);
+Adafruit_MAX31855 thermocouple3(SCK, TEMP_SENSOR3, MISO);
 
 static void InitializePins()
 {
@@ -88,6 +93,7 @@ static void InitializePins()
     gpioExpander.pinMode(BALL_VALVE_SOLENOID_E, OUTPUT);
     gpioExpander.pinMode(EJECTION_CYLINDER_SOLENOID_E, OUTPUT);
     gpioExpander.pinMode(HARD_STOP_RELAY_E, OUTPUT);
+    gpioExpander.pinMode(, OUTPUT)
 
     pinMode(INJECTION_SOLENOID, OUTPUT);
     pinMode(EJECTION_SOLENOID, OUTPUT);

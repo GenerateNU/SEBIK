@@ -23,6 +23,11 @@ void setup()
     // Serial.print("Zero factor: "); //This can be used to remove the need to tare the scale. Useful in permanent scale projects.
     // Serial.println(zero_factor);
     stateMachineHandler.Start();
+    
+    //Initialize thermocouples
+    thermocouple1.begin();
+    thermocouple2.begin();
+    thermocouple3.begin();
 }
 
 void loop()

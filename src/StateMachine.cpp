@@ -113,12 +113,16 @@ void StateMachineHandler::PlasticDispense()
 void StateMachineHandler::Heating()
 {
     Update(States::INJECTING);
+    if(GetTempReading()):
+        digitalWrite()
+
+    
 }
 
 // Turns off the heater
 void StateMachineHandler::TurnOffHeater()
 {
-
+digitalWrite()
 }
 
 // Injects melted plastic
@@ -151,7 +155,7 @@ int StateMachineHandler::GetTempReading(int pin)
 {
     // SPI stuff for temp/load cell
     digitalWrite(pin, LOW);
-    
+
     digitalWrite(pin, HIGH);
 
 }
