@@ -76,7 +76,7 @@ void StateMachineHandler::Start()
     digitalWrite(LOAD_CELL_SENSOR2, HIGH);
     digitalWrite(LOAD_CELL_SENSOR3, HIGH);
     digitalWrite(HEATER_RELAY, HIGH);
-    digitalWrite(EXTRA1, HIGH);
+    digitalWrite(AIR_PUMP_RELAY, HIGH);
     digitalWrite(EXTRA2, HIGH);
 
 
@@ -92,9 +92,18 @@ void StateMachineHandler::Start()
 
 // Turns on the air pump
 void StateMachineHandler::AirPump()
+<<<<<<< HEAD
 {
     // if desired pressure 
     Update(States::CLAMPING);
+=======
+{   
+    if (m_errorHandler.IsPressureHandled())
+        {
+            Update(States::CLAMPING);
+        }
+
+>>>>>>> 631fecf6ee45352455043b022788b0ad77d7ffd5
 }
 
 // Clamps the mold
@@ -127,7 +136,11 @@ void StateMachineHandler::TurnOffHeater()
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-    Update(States::EJECTING);
+        if (m_errorHandler.IsPressureHandled())
+        {
+            digitalWrite(INJECTION_SOLENOID, HIGH);
+            Update(States::EJECTING);
+        }
 }
 
 // Unclamps mold
@@ -182,5 +195,21 @@ void StateMachineHandler::LoadCellReading()
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
     m_EjectionTempReading = analogRead(ejectionTempPin);
+<<<<<<< HEAD
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
+=======
+    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
+}
+
+float StateMachineHandler::GetPressureReading() 
+{
+    float currentPressureValue = analogRead(INJECTION_SENSOR);
+    currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
+    //Serial.print(currentPressureValue, 1);
+    //Serial.println(“PSI: “);
+    //delay(SENSOR_READ_DELAY);
+    return currentPressureValue;
+}
+
+>>>>>>> 631fecf6ee45352455043b022788b0ad77d7ffd5

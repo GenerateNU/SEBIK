@@ -6,6 +6,7 @@
 enum Errors
 {
     OVERPRESSURE,
+    UNDERPRESSURE,
     OVERHEAT,
     NONE
 };
@@ -24,6 +25,7 @@ class ErrorHandler
 
         //TODO: handleOverheat
         void HandleOverheat();
+        bool IsPressureHandled();
 };
 
 

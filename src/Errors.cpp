@@ -34,3 +34,17 @@ void ErrorHandler::HandleOverheat()
         uiHandler.HighTempLEDOff();
     }
 }
+
+bool ErrorHandler::IsPressureHandled()
+{
+    if (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
+    {
+        digitalWrite(AIR_PUMP_RELAY, HIGH);
+        return false;
+    }
+    else
+    {
+        digitalWrite(AIR_PUMP_RELAY, LOW);
+        return true;
+    }
+}
