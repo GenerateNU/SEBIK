@@ -21,9 +21,6 @@ class StateMachineHandler
         enum States m_currentState;
         
     public:
-        static ErrorHandler m_errorHandler;
-
-        static UiHandler m_uiHandler;
 
         StateMachineHandler();
 

@@ -136,11 +136,11 @@ void StateMachineHandler::TurnOffHeater()
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-        if (m_errorHandler.IsPressureHandled())
+if (m_errorHandler.IsPressureHandled())
         {
             digitalWrite(INJECTION_SOLENOID, HIGH);
-            Update(States::EJECTING);
-        }
+    Update(States::EJECTING);
+}
 }
 
 // Unclamps mold
