@@ -76,7 +76,7 @@ void StateMachineHandler::Start()
     digitalWrite(LOAD_CELL_SENSOR2, HIGH);
     digitalWrite(LOAD_CELL_SENSOR3, HIGH);
     digitalWrite(HEATER_RELAY, HIGH);
-    digitalWrite(EXTRA1, HIGH);
+    digitalWrite(AIR_PUMP_RELAY, HIGH);
     digitalWrite(EXTRA2, HIGH);
 
 
@@ -93,7 +93,10 @@ void StateMachineHandler::Start()
 // Turns on the air pump
 void StateMachineHandler::AirPump()
 {   
-    Update(States::CLAMPING);
+    if (m_errorHandler.IsPressureHandled())
+        {
+            Update(States::CLAMPING);
+        }
 
 }
 
@@ -124,19 +127,11 @@ void StateMachineHandler::TurnOffHeater()
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-    if (GetPressureReading() >= HIGH_PRESSURE_IN_PSI)
-    {
-        // Enter error handling function here for high pressure
-    }
-    else if (GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
-    {
-        // Enter error handling function here for low pressure
-    }
-    else
-    {
-        PushPneumaticCylinder();
-        Update(States::EJECTING);
-    }
+        if (m_errorHandler.IsPressureHandled())
+        {
+            digitalWrite(INJECTION_SOLENOID, HIGH);
+            Update(States::EJECTING);
+        }
 }
 
 // Unclamps mold
@@ -206,12 +201,5 @@ float StateMachineHandler::GetPressureReading()
     //Serial.println(“PSI: “);
     //delay(SENSOR_READ_DELAY);
     return currentPressureValue;
-}
-
-void StateMachineHandler::PushPneumaticCylinder()
-{
-    digitalWrite(INJECTION_SOLENOID, HIGH);
-    //delay(Enter time it takes for cylinder to fully extend / time till cylinder can be retracted);
-    //digitalWrite(INJECTION_SOLENOID, LOW);
 }
 
