@@ -35,12 +35,16 @@ void ErrorHandler::HandleOverheat()
     }
 }
 
-void ErrorHandler::HandleUnderPressure()
+bool ErrorHandler::IsPressureHandled()
 {
-    do
+    if (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
     {
-        //stateMachineHandler.TurnOnAirPump();
-        //needs to update the pressure sensor value here
-    } while (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
-    //stateMachineHandler.TurnOffAirPump();
+        digitalWrite(AIR_PUMP_RELAY, HIGH);
+        return false;
+    }
+    else
+    {
+        digitalWrite(AIR_PUMP_RELAY, LOW);
+        return true;
+    }
 }

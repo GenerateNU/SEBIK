@@ -25,7 +25,7 @@ class ErrorHandler
 
         //TODO: handleOverheat
         void HandleOverheat();
-        void HandleUnderPressure();
+        bool IsPressureHandled();
 };
 
 

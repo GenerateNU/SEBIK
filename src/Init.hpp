@@ -47,8 +47,8 @@
 // Relays
 #define HARD_STOP_RELAY_E 10
 #define HEATER_RELAY 3
+#define AIR_PUMP_RELAY 14
 
-#define EXTRA1 14
 #define EXTRA2 15
 
 #define WATCHDOG_TIMEOUT WDTO_8S
@@ -103,7 +103,7 @@ static void InitializePins()
     pinMode(LOAD_CELL_SENSOR2, OUTPUT);
     pinMode(LOAD_CELL_SENSOR3, OUTPUT);
     pinMode(HEATER_RELAY, OUTPUT);
-    pinMode(EXTRA1, OUTPUT);
+    pinMode(AIR_PUMP_RELAY, OUTPUT);
     pinMode(EXTRA2, OUTPUT);
 }
 
