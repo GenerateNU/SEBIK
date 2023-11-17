@@ -44,7 +44,7 @@ void StateMachineHandler::MainStateMachine()
 // Updates the current state
 void StateMachineHandler::Update(States state)
 {  
-    m_currentEvent = state;
+    m_currentState = state;
 }
 
 // Initializes the first state in void setup()
@@ -92,7 +92,7 @@ void StateMachineHandler::Start()
 
 // Turns on the air pump
 void StateMachineHandler::AirPump()
-{   
+{
     // if desired pressure 
     Update(States::CLAMPING);
 }
