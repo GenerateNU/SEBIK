@@ -1,0 +1,68 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/Users/MuhaiminulAshraf/coding/SEBIK/include",
+                "/Users/MuhaiminulAshraf/coding/SEBIK/src",
+                "/Users/MuhaiminulAshraf/coding/SEBIK/.pio/libdeps/ATmega328PB/HX711/src",
+                "/Users/MuhaiminulAshraf/coding/SEBIK/.pio/libdeps/ATmega328PB/Adafruit MCP23017 Arduino Library/src",
+                "/Users/MuhaiminulAshraf/coding/SEBIK/.pio/libdeps/ATmega328PB/Adafruit BusIO",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/SPI/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/Wire/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/variants/pb-variant",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/AVR_examples/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/EEPROM/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/Optiboot_flasher/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/SPI1/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/SoftwareSerial/src",
+                "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/Wire1/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/Users/MuhaiminulAshraf/coding/SEBIK/include",
+                    "/Users/MuhaiminulAshraf/coding/SEBIK/src",
+                    "/Users/MuhaiminulAshraf/coding/SEBIK/.pio/libdeps/ATmega328PB/HX711/src",
+                    "/Users/MuhaiminulAshraf/coding/SEBIK/.pio/libdeps/ATmega328PB/Adafruit MCP23017 Arduino Library/src",
+                    "/Users/MuhaiminulAshraf/coding/SEBIK/.pio/libdeps/ATmega328PB/Adafruit BusIO",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/SPI/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/Wire/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/variants/pb-variant",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/AVR_examples/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/EEPROM/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/Optiboot_flasher/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/SPI1/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/SoftwareSerial/src",
+                    "/Users/MuhaiminulAshraf/.platformio/packages/framework-arduino-avr-minicore/libraries/Wire1/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=60111",
+                "ARDUINO_AVR_ATmega328PB",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega328PB__",
+                ""
+            ],
+            "cStandard": "gnu11",
+            "cppStandard": "gnu++17",
+            "compilerPath": "/Users/MuhaiminulAshraf/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega328pb",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}

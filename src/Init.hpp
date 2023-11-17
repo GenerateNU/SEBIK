@@ -57,7 +57,7 @@
 
 const int HIGH_TEMP_IN_CELSIUS = 175;
 const int OPTIMAL_TEMP_IN_CELSIUS = 165;
-const int LOW_TEMP_IN_CELSIUS = 160;
+// const int LOW_TEMP_IN_CELSIUS = 160;
 
 const int SAFE_TEMP_TO_TOUCH_IN_CELSIUS = 40;
 
@@ -75,9 +75,19 @@ float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 StateMachineHandler stateMachineHandler;
 Adafruit_MCP23X17 gpioExpander;
 HX711 scale;
+
 Adafruit_MAX31855 thermocouple1(SCK, TEMP_SENSOR1, MISO);
 Adafruit_MAX31855 thermocouple2(SCK, TEMP_SENSOR2, MISO);
 Adafruit_MAX31855 thermocouple3(SCK, TEMP_SENSOR3, MISO);
+
+// Define PID parameters
+double setpoint = 250; // Setpoint value (desired value)
+double output;     // Output value (control signal)
+double Kp = 2.0;         // Proportional gain
+double Ki = 0.1;         // Integral gain
+double Kd = 1.0;         // Derivative gain
+
+PID myPID(thermocouple1.readCelsius(), &output, &setpoint, Kp, Ki, Kd, DIRECT);
 
 static void InitializePins()
 {

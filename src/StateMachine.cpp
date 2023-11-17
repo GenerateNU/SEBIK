@@ -112,17 +112,17 @@ void StateMachineHandler::PlasticDispense()
 // Starts the heating process
 void StateMachineHandler::Heating()
 {
+    if (GetTempReading(thermocouple1) < OPTIMAL_TEMP_IN_CELSIUS):
+        digitalWrite(HEATER_RELAY, HIGH);
+    if (GetTempReading(thermocouple1) > HIGH_TEMP_IN_CELSIUS):
+        digitalWrite(HEATER_RELAY, LOW);
     Update(States::INJECTING);
-    if(GetTempReading()):
-        digitalWrite()
-
-    
 }
 
 // Turns off the heater
 void StateMachineHandler::TurnOffHeater()
 {
-digitalWrite()
+    digitalWrite(3, LOW);
 }
 
 // Injects melted plastic
@@ -151,12 +151,11 @@ void StateMachineHandler::Finish()
 }
 
 // Gets the temperature reading from the specified pin
-int StateMachineHandler::GetTempReading(int pin)
+int StateMachineHandler::GetTempReading(Adafruit_MAX31855 ThermSensor)
 {
     // SPI stuff for temp/load cell
-    digitalWrite(pin, LOW);
-
-    digitalWrite(pin, HIGH);
+    ThermSensor.begin();
+    return ThermSensor.readCelsius();
 
 }
 

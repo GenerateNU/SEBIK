@@ -25,9 +25,9 @@ void setup()
     stateMachineHandler.Start();
     
     //Initialize thermocouples
-    thermocouple1.begin();
-    thermocouple2.begin();
-    thermocouple3.begin();
+    // thermocouple1.begin();
+    // thermocouple2.begin();
+    // thermocouple3.begin();
 }
 
 void loop()
