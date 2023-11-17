@@ -57,7 +57,9 @@ class StateMachineHandler
         //TODO: FINISHED method
         void Finish();
 
-        void GetPressureReading();
+        float GetPressureReading();
+
+        void PushPneumaticCylinder();
 
         int GetTempReading(int pin);
         

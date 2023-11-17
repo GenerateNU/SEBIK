@@ -124,7 +124,19 @@ void StateMachineHandler::TurnOffHeater()
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-    Update(States::EJECTING);
+    if (GetPressureReading() >= HIGH_PRESSURE_IN_PSI)
+    {
+        // Enter error handling function here for high pressure
+    }
+    else if (GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
+    {
+        // Enter error handling function here for low pressure
+    }
+    else
+    {
+        PushPneumaticCylinder();
+        Update(States::EJECTING);
+    }
 }
 
 // Unclamps mold
@@ -185,3 +197,21 @@ bool StateMachineHandler::IsPlasticSafeToTouch()
     m_EjectionTempReading = analogRead(ejectionTempPin);
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
 }
+
+float StateMachineHandler::GetPressureReading() 
+{
+    float currentPressureValue = analogRead(INJECTION_SENSOR);
+    currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
+    //Serial.print(currentPressureValue, 1);
+    //Serial.println(“PSI: “);
+    //delay(SENSOR_READ_DELAY);
+    return currentPressureValue;
+}
+
+void StateMachineHandler::PushPneumaticCylinder()
+{
+    digitalWrite(INJECTION_SOLENOID, HIGH);
+    //delay(Enter time it takes for cylinder to fully extend / time till cylinder can be retracted);
+    //digitalWrite(INJECTION_SOLENOID, LOW);
+}
+
