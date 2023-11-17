@@ -71,6 +71,8 @@ const int SENSOR_READ_DELAY= 250; // sensor read delay
 float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 
 StateMachineHandler stateMachineHandler;
+ErrorHandler errorHandler;
+UiHandler uiHandler;
 Adafruit_MCP23X17 gpioExpander;
 HX711 scale;
 

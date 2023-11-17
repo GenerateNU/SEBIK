@@ -26,12 +26,12 @@ void ErrorHandler::HandleOverheat()
     // If temperature is over this threshold 
     if (stateMachineHandler.GetTempReading() > HIGH_TEMP_IN_CELSIUS)
     {
-        UiHandler.HighTempLEDOn();
+        uiHandler.HighTempLEDOn();
         stateMachineHandler.TurnOffHeater();
     }
     else
     {
-        UiHandler.HighTempLEDOff();
+        uiHandler.HighTempLEDOff();
     }
 }
 
