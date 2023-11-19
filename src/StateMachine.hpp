@@ -19,6 +19,7 @@ class StateMachineHandler
 {
     private:
         enum States m_currentState;
+        int m_timeHeated = 0; 
         
     public:
 

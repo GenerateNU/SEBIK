@@ -10,6 +10,7 @@
 #include "Ui.hpp"
 #include "Errors.hpp"
 
+
 // Crystal Oscillator
 #define F_CPU 16000000UL
 
@@ -55,7 +56,6 @@
 
 const int HIGH_TEMP_IN_CELSIUS = 175;
 const int OPTIMAL_TEMP_IN_CELSIUS = 165;
-const int LOW_TEMP_IN_CELSIUS = 175;
 
 const int SAFE_TEMP_TO_TOUCH_IN_CELSIUS = 40;
 
@@ -75,6 +75,10 @@ ErrorHandler errorHandler;
 UiHandler uiHandler;
 Adafruit_MCP23X17 gpioExpander;
 HX711 scale;
+
+Adafruit_MAX31855 thermocouple1(SCK, TEMP_SENSOR1, MISO);
+Adafruit_MAX31855 thermocouple2(SCK, TEMP_SENSOR2, MISO);
+Adafruit_MAX31855 thermocouple3(SCK, TEMP_SENSOR3, MISO);
 
 static void InitializePins()
 {

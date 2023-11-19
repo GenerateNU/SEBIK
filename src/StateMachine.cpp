@@ -117,13 +117,31 @@ void StateMachineHandler::PlasticDispense()
 // Starts the heating process
 void StateMachineHandler::Heating()
 {
-    Update(States::INJECTING);
+    if (m_timeHeated <= 240000)
+    {
+        int heatingStartTime = millis();
+        if (GetTempReading(TEMP_SENSOR1) >= OPTIMAL_TEMP_IN_CELSIUS)
+        {
+            // turn heater off
+            int heatingOptimalTempTime = millis();
+            m_timeHeated = m_timeHeated + heatingOptimalTempTime - heatingStartTime;
+            digitalWrite(HEATER_RELAY, LOW);
+        }
+        else
+        {
+            digitalWrite(HEATER_RELAY, HIGH);
+        }
+    }
+    else{
+        m_timeHeated = 0;
+        Update(States::INJECTING);
+    }
 }
 
 // Turns off the heater
 void StateMachineHandler::TurnOffHeater()
 {
-
+    digitalWrite(HEATER_RELAY, LOW)
 }
 
 // Injects melted plastic
@@ -158,7 +176,8 @@ void StateMachineHandler::Finish()
 // Gets the temperature reading from the specified pin
 int StateMachineHandler::GetTempReading(int pin)
 {
-
+    pin.begin();
+    return pin.readCelsius();
 }
 
 // Gets the load cell reading 
