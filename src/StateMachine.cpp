@@ -12,7 +12,7 @@ StateMachineHandler::~StateMachineHandler()
 
 void StateMachineHandler::MainStateMachine()
 {
-    m_errorHandler.HandleOverheat();
+    errorHandler.HandleOverheat();
     switch(m_currentState)
     {
         case AIR_PUMP:
@@ -92,18 +92,11 @@ void StateMachineHandler::Start()
 
 // Turns on the air pump
 void StateMachineHandler::AirPump()
-<<<<<<< HEAD
-{
-    // if desired pressure 
-    Update(States::CLAMPING);
-=======
 {   
-    if (m_errorHandler.IsPressureHandled())
+    if (errorHandler.IsPressureHandled())
         {
             Update(States::CLAMPING);
         }
-
->>>>>>> 631fecf6ee45352455043b022788b0ad77d7ffd5
 }
 
 // Clamps the mold
@@ -136,11 +129,11 @@ void StateMachineHandler::TurnOffHeater()
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-if (m_errorHandler.IsPressureHandled())
-        {
-            digitalWrite(INJECTION_SOLENOID, HIGH);
-    Update(States::EJECTING);
-}
+if (errorHandler.IsPressureHandled())
+    {
+        digitalWrite(INJECTION_SOLENOID, HIGH);
+        Update(States::EJECTING);
+    }
 }
 
 // Unclamps mold
@@ -155,9 +148,9 @@ void StateMachineHandler::Finish()
 {
     if (IsPlasticSafeToTouch())
     {
-        m_uiHandler.CompleteLEDOn();
+        uiHandler.CompleteLEDOn();
         delay(1000);
-        m_uiHandler.CompleteLEDOff();
+        uiHandler.CompleteLEDOff();
         Update(States::CLAMPING);
     }
 }
@@ -195,10 +188,8 @@ void StateMachineHandler::LoadCellReading()
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
     m_EjectionTempReading = analogRead(ejectionTempPin);
-<<<<<<< HEAD
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
-=======
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
 }
 
@@ -212,4 +203,3 @@ float StateMachineHandler::GetPressureReading()
     return currentPressureValue;
 }
 
->>>>>>> 631fecf6ee45352455043b022788b0ad77d7ffd5
