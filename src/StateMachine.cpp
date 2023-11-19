@@ -203,3 +203,40 @@ float StateMachineHandler::GetPressureReading()
     return currentPressureValue;
 }
 
+void StateMachineHandler::HardwareTest()
+{
+    // Air pump test
+    digitalWrite(AIR_PUMP_RELAY, HIGH);
+    delay(1000);
+    digitalWrite(AIR_PUMP_RELAY, LOW);
+
+    // Clamping test
+    digitalWrite(EJECTION_SOLENOID, HIGH);
+    delay(1000);
+    digitalWrite(EJECTION_SOLENOID, LOW);
+
+    // Plastic dispense test
+    gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
+    delay(1000);
+    gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW);
+
+    // Heating test
+    digitalWrite(HEATER_RELAY, HIGH);
+    delay(10000);
+    digitalWrite(HEATER_RELAY, LOW);
+
+    // Injecting test
+    digitalWrite(INJECTION_SOLENOID, HIGH);
+    delay(1000);
+    digitalWrite(INJECTION_SOLENOID, LOW);
+
+    // Ejecting test
+    digitalWrite(EJECTION_SOLENOID, HIGH);
+    delay(1000);
+    digitalWrite(EJECTION_SOLENOID, LOW);
+
+    // UI test
+    
+
+}
+
