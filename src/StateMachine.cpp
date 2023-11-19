@@ -120,7 +120,7 @@ void StateMachineHandler::Heating()
     if (m_timeHeated <= 240000)
     {
         int heatingStartTime = millis();
-        if (GetTempReading(TEMP_SENSOR1) >= OPTIMAL_TEMP_IN_CELSIUS)
+        if (GetTempReading(thermocouple1) >= OPTIMAL_TEMP_IN_CELSIUS)
         {
             // turn heater off
             int heatingOptimalTempTime = millis();
