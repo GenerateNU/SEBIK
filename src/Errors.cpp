@@ -20,24 +20,9 @@ ErrorHandler::~ErrorHandler()
 //     }
 // }
 
-//TODO: handleOverheat
-void ErrorHandler::HandleOverheat()
+bool ErrorHandler::IsPressureHandled(int pin)
 {
-    // If temperature is over this threshold 
-    if (stateMachineHandler.GetTempReading() > HIGH_TEMP_IN_CELSIUS)
-    {
-        uiHandler.HighTempLEDOn();
-        stateMachineHandler.TurnOffHeater();
-    }
-    else
-    {
-        uiHandler.HighTempLEDOff();
-    }
-}
-
-bool ErrorHandler::IsPressureHandled()
-{
-    if (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
+    if (stateMachineHandler.GetPressureReading(pin) < OPTIMAL_PRESSURE_IN_PSI)
     {
         digitalWrite(AIR_PUMP_RELAY, HIGH);
         return false;

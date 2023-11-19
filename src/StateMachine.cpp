@@ -15,8 +15,8 @@ void StateMachineHandler::MainStateMachine()
     errorHandler.HandleOverheat();
     switch(m_currentState)
     {
-        case AIR_PUMP:
-            AirPump();
+        case START:
+            Start();
             break;
         case CLAMPING:
             Clamping();
@@ -48,7 +48,7 @@ void StateMachineHandler::Update(States state)
 }
 
 // Initializes the first state in void setup()
-void StateMachineHandler::Start()
+void StateMachineHandler::StartStateMachine()
 {
     // NOTE: TEMPORARILY FOR HARDWARE TESTING
     gpioExpander.digitalWrite(START_PUSHBUTTON_E, HIGH);
@@ -86,17 +86,14 @@ void StateMachineHandler::Start()
     //     m_uiHandler.PlaySpeaker();
     //     //If start sequence then statemachine
     //     // Change Update parameter if you want to test a specific state
-    //     Update(States::AIR_PUMP);
+    //     Update(States::START);
     // }
 }
 
-// Turns on the air pump
-void StateMachineHandler::AirPump()
-{   
-    if (errorHandler.IsPressureHandled())
-        {
-            Update(States::CLAMPING);
-        }
+void StateMachineHandler::Start()
+{
+    // LEDs, speaker
+    // Check start button pressed
 }
 
 // Clamps the mold
@@ -141,7 +138,7 @@ void StateMachineHandler::Heating()
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-if (errorHandler.IsPressureHandled())
+if (errorHandler.IsPressureHandled(INJECTION_SENSOR))
     {
         digitalWrite(INJECTION_SOLENOID, HIGH);
         Update(States::EJECTING);
@@ -165,10 +162,12 @@ void StateMachineHandler::Finish()
         uiHandler.CompleteLEDOff();
         Update(States::CLAMPING);
     }
+
+    // retract ejection cylinder
 }
 
 // Gets the temperature reading from the specified pin
-int StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
+double StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
 {
     thermocouple.begin();
     return thermocouple.readCelsius();
@@ -203,16 +202,10 @@ bool StateMachineHandler::IsPlasticSafeToTouch()
     m_EjectionTempReading = analogRead(ejectionTempPin);
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
-    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
-}
 
-float StateMachineHandler::GetPressureReading() 
+float StateMachineHandler::GetPressureReading(int pin) 
 {
-    float currentPressureValue = analogRead(INJECTION_SENSOR);
+    float currentPressureValue = analogRead(pin);
     currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
-    //Serial.print(currentPressureValue, 1);
-    //Serial.println(“PSI: “);
-    //delay(SENSOR_READ_DELAY);
     return currentPressureValue;
 }
-

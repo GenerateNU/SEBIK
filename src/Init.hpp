@@ -6,6 +6,7 @@
 #include <SPI.h>
 #include "HX711.h"
 #include <Adafruit_MCP23X17.h>
+#include <Adafruit_MAX31855.h>
 #include "StateMachine.hpp"
 #include "Ui.hpp"
 #include "Errors.hpp"

@@ -5,7 +5,7 @@
 
 enum States
 {
-    AIR_PUMP,
+    START,
     CLAMPING,
     PLASTIC_DISPENSES,
     HEATING,
@@ -31,11 +31,8 @@ class StateMachineHandler
 
         void MainStateMachine();
 
-        //TODO: START method
-        void Start();
-
-        //TODO: AIR_PUMP method
-        void AirPump();
+        
+        void StartStateMachine();
 
         //TODO: CLAMPING method
         void Clamping();
@@ -55,11 +52,11 @@ class StateMachineHandler
         //TODO: FINISHED method
         void Finish();
 
-        float GetPressureReading();
+        float GetPressureReading(int pin);
 
         void PushPneumaticCylinder();
 
-        int GetTempReading(int pin);
+        double GetTempReading(Adafruit_MAX31855 thermocouple);
         
         void LoadCellReading();
 

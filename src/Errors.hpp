@@ -25,7 +25,7 @@ class ErrorHandler
 
         //TODO: handleOverheat
         void HandleOverheat();
-        bool IsPressureHandled();
+        bool IsPressureHandled(int pin);
 };
 
 
