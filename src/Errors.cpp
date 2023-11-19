@@ -35,11 +35,6 @@ void ErrorHandler::HandleOverheat()
     }
 }
 
-bool ErrorHandler::RightTemp()
-{
-    
-}
-
 bool ErrorHandler::IsPressureHandled()
 {
     if (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)

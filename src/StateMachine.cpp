@@ -138,12 +138,6 @@ void StateMachineHandler::Heating()
     }
 }
 
-// Turns off the heater
-void StateMachineHandler::TurnOffHeater()
-{
-    digitalWrite(HEATER_RELAY, LOW)
-}
-
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
@@ -174,10 +168,10 @@ void StateMachineHandler::Finish()
 }
 
 // Gets the temperature reading from the specified pin
-int StateMachineHandler::GetTempReading(int pin)
+int StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
 {
-    pin.begin();
-    return pin.readCelsius();
+    thermocouple.begin();
+    return thermocouple.readCelsius();
 }
 
 // Gets the load cell reading 
