@@ -15,9 +15,6 @@ void StateMachineHandler::MainStateMachine()
     errorHandler.HandleOverheat();
     switch(m_currentState)
     {
-        case AIR_PUMP:
-            AirPump();
-            break;
         case CLAMPING:
             Clamping();
             break;
@@ -39,6 +36,7 @@ void StateMachineHandler::MainStateMachine()
         default:
             break;
     }
+    delay(10);
 }
 
 // Updates the current state
@@ -90,15 +88,6 @@ void StateMachineHandler::Start()
     // }
 }
 
-// Turns on the air pump
-void StateMachineHandler::AirPump()
-{   
-    if (errorHandler.IsPressureHandled())
-        {
-            Update(States::CLAMPING);
-        }
-}
-
 // Clamps the mold
 void StateMachineHandler::Clamping()
 {
@@ -120,22 +109,32 @@ void StateMachineHandler::Heating()
     if (m_timeHeated <= 240000)
     {
         int heatingStartTime = millis();
-        if (GetTempReading(thermocouple1) >= OPTIMAL_TEMP_IN_CELSIUS)
+        if (GetTempReading(TEMP_SENSOR1) >= OPTIMAL_TEMP_IN_CELSIUS)
         {
             // turn heater off
             int heatingOptimalTempTime = millis();
             m_timeHeated = m_timeHeated + heatingOptimalTempTime - heatingStartTime;
-            digitalWrite(HEATER_RELAY, LOW);
         }
         else
         {
-            digitalWrite(HEATER_RELAY, HIGH);
+            // turn heater on
         }
     }
-    else{
-        m_timeHeated = 0;
-        Update(States::INJECTING);
-    }
+
+
+    // if time heated is below required
+        // maintain temp
+        // append to timer variable
+
+    // else transition to next state
+
+    Update(States::INJECTING);
+}
+
+// Turns off the heater
+void StateMachineHandler::TurnOffHeater()
+{
+
 }
 
 // Injects melted plastic
@@ -168,10 +167,9 @@ void StateMachineHandler::Finish()
 }
 
 // Gets the temperature reading from the specified pin
-int StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
+int StateMachineHandler::GetTempReading(int pin)
 {
-    thermocouple.begin();
-    return thermocouple.readCelsius();
+
 }
 
 // Gets the load cell reading 
@@ -249,7 +247,18 @@ void StateMachineHandler::HardwareTest()
     digitalWrite(EJECTION_SOLENOID, LOW);
 
     // UI test
-    
+    if (digitalRead(START_PUSHBUTTON_E, HIGH))
+    {
+        digitalWrite(SPEAKER_E, HIGH);
+        delay(1000);
+        digitalWrite(SPEAKER_E, LOW);
+        digitalWrite(HIGH_TEMP_LED_E, HIGH);
+        digitalWrite(IN_PROGRESS_LED_E, HIGH);
+        digitalWrite(LOW_TEMP_LED_E, HIGH);
+        digitalWrite(HIGH_PRESSURE_LED_E, HIGH);
+        digitalWrite(COMPLETE_LED_E, HIGH);
+    }
+
 
 }
 

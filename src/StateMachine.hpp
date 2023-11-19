@@ -5,7 +5,7 @@
 
 enum States
 {
-    AIR_PUMP,
+    //AIR_PUMP,
     CLAMPING,
     PLASTIC_DISPENSES,
     HEATING,
@@ -19,7 +19,8 @@ class StateMachineHandler
 {
     private:
         enum States m_currentState;
-        int m_timeHeated = 0; 
+
+        int m_timeHeated = 0;
         
     public:
 
@@ -68,6 +69,8 @@ class StateMachineHandler
         void PowerOff();
 
         void TurnOffHeater();
+
+        void HardwareTest();
 };
 
 #endif
