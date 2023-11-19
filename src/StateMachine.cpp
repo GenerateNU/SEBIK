@@ -15,6 +15,9 @@ void StateMachineHandler::MainStateMachine()
     errorHandler.HandleOverheat();
     switch(m_currentState)
     {
+        case START:
+            Start();
+            break;
         case CLAMPING:
             Clamping();
             break;
@@ -36,7 +39,6 @@ void StateMachineHandler::MainStateMachine()
         default:
             break;
     }
-    delay(10);
 }
 
 // Updates the current state
@@ -46,7 +48,7 @@ void StateMachineHandler::Update(States state)
 }
 
 // Initializes the first state in void setup()
-void StateMachineHandler::Start()
+void StateMachineHandler::StartStateMachine()
 {
     // NOTE: TEMPORARILY FOR HARDWARE TESTING
     gpioExpander.digitalWrite(START_PUSHBUTTON_E, HIGH);
@@ -84,8 +86,14 @@ void StateMachineHandler::Start()
     //     m_uiHandler.PlaySpeaker();
     //     //If start sequence then statemachine
     //     // Change Update parameter if you want to test a specific state
-    //     Update(States::AIR_PUMP);
+    //     Update(States::START);
     // }
+}
+
+void StateMachineHandler::Start()
+{
+    // LEDs, speaker
+    // Check start button pressed
 }
 
 // Clamps the mold
@@ -109,38 +117,28 @@ void StateMachineHandler::Heating()
     if (m_timeHeated <= 240000)
     {
         int heatingStartTime = millis();
-        if (GetTempReading(TEMP_SENSOR1) >= OPTIMAL_TEMP_IN_CELSIUS)
+        if (GetTempReading(thermocouple1) >= OPTIMAL_TEMP_IN_CELSIUS)
         {
             // turn heater off
             int heatingOptimalTempTime = millis();
             m_timeHeated = m_timeHeated + heatingOptimalTempTime - heatingStartTime;
+            digitalWrite(HEATER_RELAY, LOW);
         }
         else
         {
-            // turn heater on
+            digitalWrite(HEATER_RELAY, HIGH);
         }
     }
-
-
-    // if time heated is below required
-        // maintain temp
-        // append to timer variable
-
-    // else transition to next state
-
-    Update(States::INJECTING);
-}
-
-// Turns off the heater
-void StateMachineHandler::TurnOffHeater()
-{
-
+    else{
+        m_timeHeated = 0;
+        Update(States::INJECTING);
+    }
 }
 
 // Injects melted plastic
 void StateMachineHandler::Injecting()
 {
-if (errorHandler.IsPressureHandled())
+if (errorHandler.IsPressureHandled(INJECTION_SENSOR))
     {
         digitalWrite(INJECTION_SOLENOID, HIGH);
         Update(States::EJECTING);
@@ -164,12 +162,15 @@ void StateMachineHandler::Finish()
         uiHandler.CompleteLEDOff();
         Update(States::CLAMPING);
     }
+
+    // retract ejection cylinder
 }
 
 // Gets the temperature reading from the specified pin
-int StateMachineHandler::GetTempReading(int pin)
+double StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
 {
-
+    thermocouple.begin();
+    return thermocouple.readCelsius();
 }
 
 // Gets the load cell reading 
@@ -201,64 +202,10 @@ bool StateMachineHandler::IsPlasticSafeToTouch()
     m_EjectionTempReading = analogRead(ejectionTempPin);
     return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
-    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS
-}
 
-float StateMachineHandler::GetPressureReading() 
+float StateMachineHandler::GetPressureReading(int pin) 
 {
-    float currentPressureValue = analogRead(INJECTION_SENSOR);
+    float currentPressureValue = analogRead(pin);
     currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
-    //Serial.print(currentPressureValue, 1);
-    //Serial.println(“PSI: “);
-    //delay(SENSOR_READ_DELAY);
     return currentPressureValue;
 }
-
-void StateMachineHandler::HardwareTest()
-{
-    // Air pump test
-    digitalWrite(AIR_PUMP_RELAY, HIGH);
-    delay(1000);
-    digitalWrite(AIR_PUMP_RELAY, LOW);
-
-    // Clamping test
-    digitalWrite(EJECTION_SOLENOID, HIGH);
-    delay(1000);
-    digitalWrite(EJECTION_SOLENOID, LOW);
-
-    // Plastic dispense test
-    gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
-    delay(1000);
-    gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW);
-
-    // Heating test
-    digitalWrite(HEATER_RELAY, HIGH);
-    delay(10000);
-    digitalWrite(HEATER_RELAY, LOW);
-
-    // Injecting test
-    digitalWrite(INJECTION_SOLENOID, HIGH);
-    delay(1000);
-    digitalWrite(INJECTION_SOLENOID, LOW);
-
-    // Ejecting test
-    digitalWrite(EJECTION_SOLENOID, HIGH);
-    delay(1000);
-    digitalWrite(EJECTION_SOLENOID, LOW);
-
-    // UI test
-    if (digitalRead(START_PUSHBUTTON_E, HIGH))
-    {
-        digitalWrite(SPEAKER_E, HIGH);
-        delay(1000);
-        digitalWrite(SPEAKER_E, LOW);
-        digitalWrite(HIGH_TEMP_LED_E, HIGH);
-        digitalWrite(IN_PROGRESS_LED_E, HIGH);
-        digitalWrite(LOW_TEMP_LED_E, HIGH);
-        digitalWrite(HIGH_PRESSURE_LED_E, HIGH);
-        digitalWrite(COMPLETE_LED_E, HIGH);
-    }
-
-
-}
-
