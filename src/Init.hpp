@@ -4,7 +4,7 @@
 #include <Arduino.h>
 #include <avr/wdt.h>
 #include <SPI.h>
-#include "HX711.h"
+#include <HX711_ADC.h>
 #include <Adafruit_MCP23X17.h>
 #include <Adafruit_MAX31855.h>
 #include "StateMachine.hpp"
@@ -69,13 +69,19 @@ const int PRESSURE_MAX = 512;// analog read of pressure sensor at 100 psi
 const int MAX_PSI = 100; // psi value of pressure sensor
 const int SENSOR_READ_DELAY= 250; // sensor read delay
 
+const float PETRI_DISH_WEIGHT = 100; // g, change this later to actual weight
+
 float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 
 StateMachineHandler stateMachineHandler;
 ErrorHandler errorHandler;
 UiHandler uiHandler;
 Adafruit_MCP23X17 gpioExpander;
-HX711 scale;
+HX711_ADC load_cell_1(LOAD_CELL_SENSOR1, SCK);
+HX711_ADC load_cell_2(LOAD_CELL_SENSOR2, SCK);
+HX711_ADC load_cell_3(LOAD_CELL_SENSOR3, SCK);
+
+
 
 Adafruit_MAX31855 thermocouple1(SCK, TEMP_SENSOR1, MISO);
 Adafruit_MAX31855 thermocouple2(SCK, TEMP_SENSOR2, MISO);
@@ -112,6 +118,11 @@ static void InitializePins()
     pinMode(HEATER_RELAY, OUTPUT);
     pinMode(AIR_PUMP_RELAY, OUTPUT);
     pinMode(EXTRA2, OUTPUT);
+
+    load_cell_1.setCalFactor(809.03);
+    load_cell_2.setCalFactor(836.88);
+    load_cell_3.setCalFactor(771.25);
+
 }
 
 #endif
