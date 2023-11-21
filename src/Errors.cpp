@@ -35,9 +35,9 @@ void ErrorHandler::HandleOverheat()
     }
 }
 
-bool ErrorHandler::IsPressureHandled()
+bool ErrorHandler::IsPressureHandled(int pin)
 {
-    if (stateMachineHandler.GetPressureReading() < OPTIMAL_PRESSURE_IN_PSI)
+    if (stateMachineHandler.GetPressureReading(pin) < OPTIMAL_PRESSURE_IN_PSI)
     {
         digitalWrite(AIR_PUMP_RELAY, HIGH);
         return false;
