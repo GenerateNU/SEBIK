@@ -20,7 +20,8 @@ class StateMachineHandler
     private:
         enum States m_currentState;
         int m_timeHeated = 0; 
-        
+        float m_plastic_dispensed = 0;
+        float m_previous_weight;
     public:
 
         StateMachineHandler();
@@ -40,6 +41,8 @@ class StateMachineHandler
 
         //TODO: PLASTIC_DISPENSE method
         void PlasticDispense();
+
+        float TotalHopperWeight();
 
         //TODO: HEATING method
         void Heating();
