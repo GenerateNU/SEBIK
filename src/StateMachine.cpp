@@ -99,16 +99,39 @@ void StateMachineHandler::Start()
 // Clamps the mold
 void StateMachineHandler::Clamping()
 {
+    float m_previous_weight = TotalHopperWeight(); // make sure that valve is closed when this measurment is being taken
     Update(States::PLASTIC_DISPENSES);
 }
 
 // Dispenses plastic
 void StateMachineHandler::PlasticDispense()
 {
-    // if (readWeight and it is below optimal weight)
-    // dispense plastic
-    // else
+    float curr_weight = TotalHopperWeight();
+    m_plastic_dispensed = m_plastic_dispensed + m_previous_weight - curr_weight;
+    m_previous_weight = curr_weight;
+    if (m_plastic_dispensed >= PETRI_DISH_WEIGHT) {
+        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW); // close solenoid & ball valve
         Update(States::HEATING);
+    }
+    else {
+        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
+    }
+
+    /*
+    float curr_weight = TotalHopperWeight();
+    if ((m_init_hopper_weight - curr_weight) <= PETRI_DISH_WEIGHT) {
+        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW); // close solenoid & ball valve
+        Update(States::HEATING);
+    }
+    else {
+        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
+    }
+    */
+}
+
+float StateMachineHandler::TotalHopperWeight()
+{
+    return load_cell_1.getData() + load_cell_2.getData() + load_cell_3.getData();
 }
 
 // Starts the heating process
