@@ -39,6 +39,7 @@ void StateMachineHandler::MainStateMachine()
         default:
             break;
     }
+    delay(10);
 }
 
 // Updates the current state
@@ -79,15 +80,17 @@ void StateMachineHandler::StartStateMachine()
     digitalWrite(AIR_PUMP_RELAY, HIGH);
     digitalWrite(EXTRA2, HIGH);
 
+    //Update(States::START);
+}
 
-    // if (m_uiHandler.IsStartButtonPressed())
-    // {
-    //     m_uiHandler.InProgressLEDOn();
-    //     m_uiHandler.PlaySpeaker();
-    //     //If start sequence then statemachine
-    //     // Change Update parameter if you want to test a specific state
-    //     Update(States::AIR_PUMP);
-    // }
+void StateMachineHandler::Start()
+{
+    if (uiHandler.IsStartButtonPressed())
+    {
+        uiHandler.InProgressLEDOn();
+        uiHandler.PlaySpeaker();
+        Update(States::CLAMPING);
+    }
 }
 
 // Clamps the mold
@@ -149,6 +152,7 @@ void StateMachineHandler::Unclamping()
 // Finishing procedure
 void StateMachineHandler::Finish()
 {
+    digitalWrite(EJECTION_CYLINDER_SOLENOID_E, LOW);
     if (IsPlasticSafeToTouch())
     {
         uiHandler.CompleteLEDOn();
@@ -191,7 +195,7 @@ void StateMachineHandler::LoadCellReading()
 // Checks if the plastic is safe to touch
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
-
+    return GetTempReading(thermocouple3) < SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
 
 float StateMachineHandler::GetPressureReading(int pin) 

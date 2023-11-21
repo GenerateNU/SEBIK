@@ -23,16 +23,16 @@ ErrorHandler::~ErrorHandler()
 //TODO: handleOverheat
 void ErrorHandler::HandleOverheat()
 {
-    // If temperature is over this threshold 
-    if (stateMachineHandler.GetTempReading() > HIGH_TEMP_IN_CELSIUS)
-    {
-        uiHandler.HighTempLEDOn();
-        stateMachineHandler.TurnOffHeater();
-    }
-    else
-    {
-        uiHandler.HighTempLEDOff();
-    }
+    // // If temperature is over this threshold 
+    // if (stateMachineHandler.GetTempReading() > HIGH_TEMP_IN_CELSIUS)
+    // {
+    //     uiHandler.HighTempLEDOn();
+    //     stateMachineHandler.TurnOffHeater();
+    // }
+    // else
+    // {
+    //     uiHandler.HighTempLEDOff();
+    // }
 }
 
 bool ErrorHandler::IsPressureHandled(int pin)
