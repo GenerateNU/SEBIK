@@ -12,7 +12,7 @@ enum States
     INJECTING,
     EJECTING,
     FINSHED,
-    HARD_STOP    
+    HARD_STOP
 };
 
 class StateMachineHandler
@@ -31,8 +31,9 @@ class StateMachineHandler
         void Update(States state);
 
         void MainStateMachine();
-
         
+        void Start();
+
         void StartStateMachine();
 
         //TODO: CLAMPING method

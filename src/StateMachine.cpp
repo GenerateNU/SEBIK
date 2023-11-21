@@ -39,11 +39,12 @@ void StateMachineHandler::MainStateMachine()
         default:
             break;
     }
+    delay(10);
 }
 
 // Updates the current state
 void StateMachineHandler::Update(States state)
-{  
+{
     m_currentState = state;
 }
 
@@ -79,21 +80,17 @@ void StateMachineHandler::StartStateMachine()
     digitalWrite(AIR_PUMP_RELAY, HIGH);
     digitalWrite(EXTRA2, HIGH);
 
-
-    // if (m_uiHandler.IsStartButtonPressed())
-    // {
-    //     m_uiHandler.InProgressLEDOn();
-    //     m_uiHandler.PlaySpeaker();
-    //     //If start sequence then statemachine
-    //     // Change Update parameter if you want to test a specific state
-    //     Update(States::START);
-    // }
+    //Update(States::START);
 }
 
 void StateMachineHandler::Start()
 {
-    // LEDs, speaker
-    // Check start button pressed
+    if (uiHandler.IsStartButtonPressed())
+    {
+        uiHandler.InProgressLEDOn();
+        uiHandler.PlaySpeaker();
+        Update(States::CLAMPING);
+    }
 }
 
 // Clamps the mold
@@ -121,7 +118,7 @@ void StateMachineHandler::PlasticDispense()
     float curr_weight = TotalHopperWeight();
     if ((m_init_hopper_weight - curr_weight) <= PETRI_DISH_WEIGHT) {
         gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW); // close solenoid & ball valve
-        Update(States::HEATING);
+    Update(States::HEATING);
     }
     else {
         gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
@@ -178,6 +175,7 @@ void StateMachineHandler::Unclamping()
 // Finishing procedure
 void StateMachineHandler::Finish()
 {
+    digitalWrite(EJECTION_CYLINDER_SOLENOID_E, LOW);
     if (IsPlasticSafeToTouch())
     {
         uiHandler.CompleteLEDOn();
@@ -185,8 +183,6 @@ void StateMachineHandler::Finish()
         uiHandler.CompleteLEDOff();
         Update(States::CLAMPING);
     }
-
-    // retract ejection cylinder
 }
 
 // Gets the temperature reading from the specified pin
@@ -196,34 +192,10 @@ double StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
     return thermocouple.readCelsius();
 }
 
-// Gets the load cell reading 
-void StateMachineHandler::LoadCellReading()
-{
-    // scale.begin(MISO, SCK);
-    // scale.set_scale(calibration_factor); //Adjust to this calibration factor
-
-    // Serial.print("Reading: ");
-    // Serial.print((scale.get_units())* 453.592, 3);
-    // Serial.print(" g"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
-    // Serial.print(" calibration_factor: ");
-    // Serial.print(calibration_factor);
-    // Serial.println();
-
-    // if(Serial.available())
-    // {
-    //     char temp = Serial.read();
-    //     if(temp == '+' || temp == 'a')
-    //     calibration_factor += 10;
-    //     else if(temp == '-' || temp == 'z')
-    //     calibration_factor -= 10;
-    // }
-}
-
 // Checks if the plastic is safe to touch
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
-    m_EjectionTempReading = analogRead(ejectionTempPin);
-    return m_EjectionTempReading <= SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
+    return GetTempReading(thermocouple3) < SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
 
 float StateMachineHandler::GetPressureReading(int pin) 
@@ -232,3 +204,4 @@ float StateMachineHandler::GetPressureReading(int pin)
     currentPressureValue = currentPressureValue / 1000;
     return currentPressureValue;
 }
+
