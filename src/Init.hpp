@@ -64,6 +64,7 @@ const int HIGH_PRESSURE_IN_PSI = 100;
 const int OPTIMAL_PRESSURE_IN_PSI = 90; 
 const int LOW_PRESSURE_IN_PSI = 80;
 
+<<<<<<< HEAD
 const int PRESSURE_ZERO = 102.4; // analog read of pressure sensor at 0 psi
 const int PRESSURE_MAX = 512;// analog read of pressure sensor at 100 psi
 const int MAX_PSI = 100; // psi value of pressure sensor
@@ -71,6 +72,8 @@ const int SENSOR_READ_DELAY= 250; // sensor read delay
 
 const float PETRI_DISH_WEIGHT = 100; // g, change this later to actual weight
 
+=======
+>>>>>>> b93a11fd7963690e6d5c888cc30058a48ef9d2da
 float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 
 StateMachineHandler stateMachineHandler;
