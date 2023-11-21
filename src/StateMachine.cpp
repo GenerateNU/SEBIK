@@ -192,29 +192,6 @@ double StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
     return thermocouple.readCelsius();
 }
 
-// Gets the load cell reading 
-void StateMachineHandler::LoadCellReading()
-{
-    // scale.begin(MISO, SCK);
-    // scale.set_scale(calibration_factor); //Adjust to this calibration factor
-
-    // Serial.print("Reading: ");
-    // Serial.print((scale.get_units())* 453.592, 3);
-    // Serial.print(" g"); //Change this to kg and re-adjust the calibration factor if you follow SI units like a sane person
-    // Serial.print(" calibration_factor: ");
-    // Serial.print(calibration_factor);
-    // Serial.println();
-
-    // if(Serial.available())
-    // {
-    //     char temp = Serial.read();
-    //     if(temp == '+' || temp == 'a')
-    //     calibration_factor += 10;
-    //     else if(temp == '-' || temp == 'z')
-    //     calibration_factor -= 10;
-    // }
-}
-
 // Checks if the plastic is safe to touch
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
@@ -224,10 +201,7 @@ bool StateMachineHandler::IsPlasticSafeToTouch()
 float StateMachineHandler::GetPressureReading(int pin) 
 {
     float currentPressureValue = analogRead(pin);
-    currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
-    //Serial.print(currentPressureValue, 1);
-    //Serial.println(“PSI: “);
-    //delay(SENSOR_READ_DELAY);
+    currentPressureValue = currentPressureValue / 1000;
     return currentPressureValue;
 }
 
