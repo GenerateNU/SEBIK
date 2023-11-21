@@ -206,6 +206,6 @@ bool StateMachineHandler::IsPlasticSafeToTouch()
 float StateMachineHandler::GetPressureReading(int pin) 
 {
     float currentPressureValue = analogRead(pin);
-    currentPressureValue = ((currentPressureValue - PRESSURE_ZERO) * MAX_PSI) / (PRESSURE_MAX - PRESSURE_ZERO);
+    currentPressureValue = currentPressureValue / 1000;
     return currentPressureValue;
 }
