@@ -1,27 +1,7 @@
-#include "Errors.hpp"
-
-ErrorHandler::ErrorHandler()
-{
-
-}
-
-ErrorHandler::~ErrorHandler()
-{
-
-}
-
-// //TODO: handleOverpressure
-// void ErrorHandler::HandleOverpressure()
-// {
-//     // If pressure is over this threshold
-//     if (stateMachineHandler.GetPressureReading() > HIGH_PRESSURE_IN_PSI)
-//     {
-//         //Relieve pressure via Ejection solenoid
-//     }
-// }
+#include "StateMachine.hpp"
 
 //TODO: handleOverheat
-void ErrorHandler::HandleOverheat()
+void StateMachineHandler::HandleOverheat()
 {
     // // If temperature is over this threshold 
     // if (stateMachineHandler.GetTempReading() > HIGH_TEMP_IN_CELSIUS)
@@ -35,9 +15,9 @@ void ErrorHandler::HandleOverheat()
     // }
 }
 
-bool ErrorHandler::IsPressureHandled(int pin)
+bool StateMachineHandler::IsPressureHandled(int pin)
 {
-    if (stateMachineHandler.GetPressureReading(pin) < OPTIMAL_PRESSURE_IN_PSI)
+    if (GetPressureReading(pin) < OPTIMAL_PRESSURE_IN_PSI)
     {
         digitalWrite(AIR_PUMP_RELAY, HIGH);
         return false;

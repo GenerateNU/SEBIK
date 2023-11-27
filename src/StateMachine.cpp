@@ -1,8 +1,8 @@
 #include "StateMachine.hpp"
 
-StateMachineHandler::StateMachineHandler()
+StateMachineHandler::StateMachineHandler(Adafruit_MCP23X17 expander)
 {
-
+    gpioExpander = expander;
 }
 
 StateMachineHandler::~StateMachineHandler()
@@ -10,9 +10,12 @@ StateMachineHandler::~StateMachineHandler()
 
 }
 
+
+
+// Main state machine
 void StateMachineHandler::MainStateMachine()
 {
-    errorHandler.HandleOverheat();
+    HandleOverheat();
     switch(m_currentState)
     {
         case START:
@@ -48,9 +51,49 @@ void StateMachineHandler::Update(States state)
     m_currentState = state;
 }
 
-// Initializes the first state in void setup()
+
+void StateMachineHandler::InitializePins()
+{
+    //NOTE: TEMPORARILY MADE ALL PINS OUTPUT FOR HARDWARE TESTING
+    // GPIO expander pinmodes
+    gpioExpander.pinMode(START_PUSHBUTTON_E, OUTPUT);
+    gpioExpander.pinMode(SPEAKER_E, OUTPUT);
+    gpioExpander.pinMode(HIGH_TEMP_LED_E, OUTPUT);
+    gpioExpander.pinMode(IN_PROGRESS_LED_E, OUTPUT);
+    gpioExpander.pinMode(LOW_TEMP_LED_E, OUTPUT);
+    gpioExpander.pinMode(HIGH_PRESSURE_LED_E, OUTPUT);
+    gpioExpander.pinMode(COMPLETE_LED_E, OUTPUT);
+    gpioExpander.pinMode(BALL_VALVE_SOLENOID_E, OUTPUT);
+    gpioExpander.pinMode(EJECTION_CYLINDER_SOLENOID_E, OUTPUT);
+    gpioExpander.pinMode(HARD_STOP_RELAY_E, OUTPUT);
+
+    pinMode(INJECTION_SOLENOID, OUTPUT);
+    pinMode(EJECTION_SOLENOID, OUTPUT);
+    pinMode(MISO, OUTPUT);
+    pinMode(MOSI, OUTPUT);
+    pinMode(SCK, OUTPUT);
+    pinMode(TEMP_SENSOR1, OUTPUT);
+    pinMode(TEMP_SENSOR2, OUTPUT);
+    pinMode(TEMP_SENSOR3, OUTPUT);
+    pinMode(INJECTION_SENSOR, OUTPUT);
+    pinMode(EJECTION_SENSOR, OUTPUT);
+    pinMode(LOAD_CELL_SENSOR1, OUTPUT);
+    pinMode(LOAD_CELL_SENSOR2, OUTPUT);
+    pinMode(LOAD_CELL_SENSOR3, OUTPUT);
+    pinMode(HEATER_RELAY, OUTPUT);
+    pinMode(AIR_PUMP_RELAY, OUTPUT);
+    pinMode(EXTRA2, OUTPUT);
+
+    load_cell_1.setCalFactor(809.03);
+    load_cell_2.setCalFactor(836.88);
+    load_cell_3.setCalFactor(771.25);
+
+}
+
+// Triggers state machine
 void StateMachineHandler::StartStateMachine()
 {
+    
     // NOTE: TEMPORARILY FOR HARDWARE TESTING
     gpioExpander.digitalWrite(START_PUSHBUTTON_E, HIGH);
     gpioExpander.digitalWrite(SPEAKER_E, HIGH);
@@ -83,57 +126,53 @@ void StateMachineHandler::StartStateMachine()
     //Update(States::START);
 }
 
+// Executes start procedure
 void StateMachineHandler::Start()
 {
-    if (uiHandler.IsStartButtonPressed())
+    if (IsStartButtonPressed())
     {
-        uiHandler.InProgressLEDOn();
-        uiHandler.PlaySpeaker();
+        InProgressLEDOn();
+        PlaySpeaker();
         Update(States::CLAMPING);
     }
 }
 
-// Clamps the mold
+// Executes clamping procedure
 void StateMachineHandler::Clamping()
 {
-    float m_previous_weight = TotalHopperWeight(); // make sure that valve is closed when this measurment is being taken
+    m_previous_weight = GetTotalHopperWeight();
     Update(States::PLASTIC_DISPENSES);
 }
 
-// Dispenses plastic
+// Executes the plastic dispensing procedure
 void StateMachineHandler::PlasticDispense()
 {
-    float curr_weight = TotalHopperWeight();
+    float curr_weight = GetTotalHopperWeight();
+
+    // Calculates the plastic dispensed by keeping track of the previous and current weight
     m_plastic_dispensed = m_plastic_dispensed + m_previous_weight - curr_weight;
     m_previous_weight = curr_weight;
-    if (m_plastic_dispensed >= PETRI_DISH_WEIGHT) {
-        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW); // close solenoid & ball valve
+    if (m_plastic_dispensed >= PETRI_DISH_WEIGHT) 
+    {
+        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW);
         Update(States::HEATING);
     }
-    else {
+    else 
+    {
         gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
     }
-
-    /*
-    float curr_weight = TotalHopperWeight();
-    if ((m_init_hopper_weight - curr_weight) <= PETRI_DISH_WEIGHT) {
-        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW); // close solenoid & ball valve
-    Update(States::HEATING);
-    }
-    else {
-        gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
-    }
-    */
 }
 
-float StateMachineHandler::TotalHopperWeight()
+// Gets the current hopper weight
+float StateMachineHandler::GetTotalHopperWeight()
 {
     return load_cell_1.getData() + load_cell_2.getData() + load_cell_3.getData();
 }
 
-// Starts the heating process
+// Executes the heating procedure
 void StateMachineHandler::Heating()
 {
+    // PLastic must be heated at optimal temp for 4 min
     if (m_timeHeated <= 240000)
     {
         int heatingStartTime = millis();
@@ -149,59 +188,60 @@ void StateMachineHandler::Heating()
             digitalWrite(HEATER_RELAY, HIGH);
         }
     }
-    else{
+    else
+    {
         m_timeHeated = 0;
         Update(States::INJECTING);
     }
 }
 
-// Injects melted plastic
+// Executes the injecting procedure
 void StateMachineHandler::Injecting()
 {
-if (errorHandler.IsPressureHandled(INJECTION_SENSOR))
+if (IsPressureHandled(INJECTION_SENSOR))
     {
         digitalWrite(INJECTION_SOLENOID, HIGH);
         Update(States::EJECTING);
     }
 }
 
-// Unclamps mold
+// Executes the unclamping procedure
 void StateMachineHandler::Unclamping()
 {
     digitalWrite(EJECTION_CYLINDER_SOLENOID_E, HIGH);
     Update(States::FINSHED);
 }
 
-// Finishing procedure
+// Executes the finish procedure
 void StateMachineHandler::Finish()
 {
     digitalWrite(EJECTION_CYLINDER_SOLENOID_E, LOW);
     if (IsPlasticSafeToTouch())
     {
-        uiHandler.CompleteLEDOn();
+        CompleteLEDOn();
         delay(1000);
-        uiHandler.CompleteLEDOff();
+        CompleteLEDOff();
         Update(States::CLAMPING);
     }
 }
 
-// Gets the temperature reading from the specified pin
+// Gets the temperature reading from the supplied thermocouple
 double StateMachineHandler::GetTempReading(Adafruit_MAX31855 thermocouple)
 {
     thermocouple.begin();
     return thermocouple.readCelsius();
 }
 
-// Checks if the plastic is safe to touch
+// Returns if the plastic in the ejection drawer is safe to touch
 bool StateMachineHandler::IsPlasticSafeToTouch()
 {
     return GetTempReading(thermocouple3) < SAFE_TEMP_TO_TOUCH_IN_CELSIUS;
 }
 
+// Gets the pressure reading from the supplied pressure sensor pin
 float StateMachineHandler::GetPressureReading(int pin) 
 {
     float currentPressureValue = analogRead(pin);
     currentPressureValue = currentPressureValue / 1000;
     return currentPressureValue;
 }
-
