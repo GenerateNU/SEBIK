@@ -1,82 +1,75 @@
-#include "Ui.hpp"
+#include "StateMachine.hpp"
 
-UiHandler::UiHandler()
+// Checks if the start button is pressed
+bool StateMachineHandler::IsStartButtonPressed()
 {
+    return gpioExpander.digitalRead(START_PUSHBUTTON_E) == HIGH;
 }
 
-UiHandler::~UiHandler()
-{
-}
-
-//TODO: StartButtonPressed
-bool UiHandler::IsStartButtonPressed()
-{
-    return gpioExpander.digitalRead(START_BUTTON_PRESSED) == HIGH;
-}
-
-void UiHandler::PlaySpeaker()
+// Plays the speaker
+void StateMachineHandler::PlaySpeaker()
 {
     gpioExpander.digitalWrite(SPEAKER_E, HIGH);
     delay(3000);
     gpioExpander.digitalWrite(SPEAKER_E, LOW);
 }
 
-//TODO: HighTempLEDOn
-void UiHandler::HighTempLEDOn()
+// Turns on the high temp LED
+void StateMachineHandler::HighTempLEDOn()
 {
     gpioExpander.digitalWrite(HIGH_TEMP_LED_E, HIGH);
 }
 
-//TODO: HighTempLEDOff
-void UiHandler::HighTempLEDOff()
+// Turns off the high temp LED
+void StateMachineHandler::HighTempLEDOff()
 {
     gpioExpander.digitalWrite(HIGH_TEMP_LED_E, LOW);
 }
 
-//TODO: LowTempLEDOn
-void UiHandler::LowTempLEDOn()
+// Turns on the low temp LED
+void StateMachineHandler::LowTempLEDOn()
 {
     gpioExpander.digitalWrite(LOW_TEMP_LED_E, HIGH);
 }
 
-//TODO: LowTempLEDOff
-void UiHandler::LowTempLEDOff()
+// Turns off the low temp LED
+void StateMachineHandler::LowTempLEDOff()
 {
     gpioExpander.digitalWrite(LOW_TEMP_LED_E, LOW);
 }
 
-//TODO: HighPressureLEDOn
-void UiHandler::HighPressureLEDOn()
+// Turns on the high pressure LED
+void StateMachineHandler::HighPressureLEDOn()
 {
     gpioExpander.digitalWrite(HIGH_PRESSURE_LED_E, HIGH);
 }
 
-//TODO: HighPressureLEDOff
-void UiHandler::HighPressureLEDOff()
+// Turns off the high pressure LED
+void StateMachineHandler::HighPressureLEDOff()
 {
     gpioExpander.digitalWrite(HIGH_PRESSURE_LED_E, LOW);
 }
 
-//TODO: InProgressLEDOn
-void UiHandler::InProgressLEDOn()
+// Turns on the in progress LED
+void StateMachineHandler::InProgressLEDOn()
 {
     gpioExpander.digitalWrite(IN_PROGRESS_LED_E, HIGH);
 }
 
-//TODO: InProgressLEDOff
-void UiHandler::InProgressLEDOff()
+// Turns off the in progress LED
+void StateMachineHandler::InProgressLEDOff()
 {
     gpioExpander.digitalWrite(IN_PROGRESS_LED_E, LOW);
 }
 
-//TODO: CompleteLEDOn
-void UiHandler::CompleteLEDOn()
+// Turns on the complete LED
+void StateMachineHandler::CompleteLEDOn()
 {
     gpioExpander.digitalWrite(COMPLETE_LED_E, HIGH);
 }
 
-//TODO: CompleteLEDOff
-void UiHandler::CompleteLEDOff()
+// Turns off the complete LED
+void StateMachineHandler::CompleteLEDOff()
 {
     gpioExpander.digitalWrite(COMPLETE_LED_E, LOW);
 }

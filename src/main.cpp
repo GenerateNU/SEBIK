@@ -1,26 +1,31 @@
-#include "Init.hpp"
+#include <Arduino.h>
+#include <avr/wdt.h>
+#include <Adafruit_MCP23X17.h>
+#include <Adafruit_MAX31855.h>
+#include "StateMachine.hpp"
 
 #define BAUD_RATE 115200
 
+// Crystal Oscillator
+#define F_CPU 16000000UL
+
+// Watchdog timer
+#define WATCHDOG_TIMEOUT WDTO_8S
+
+Adafruit_MCP23X17 gpioExpander;
+
+
+StateMachineHandler stateMachineHandler(gpioExpander);
+
 void setup()
-{
-    InitializePins();
+{   
+    stateMachineHandler.InitializePins();
     wdt_disable();
     delay(3000);
     wdt_enable(WATCHDOG_TIMEOUT);
 
     Serial.begin(9600);
     gpioExpander.begin_I2C();
-    SPI.begin();
-    SPI.setClockDivider(SPI_CLOCK_DIV8);
-
-    // Load Cell setup
-    // scale.begin(DOUT, CLK);
-    // scale.set_scale();
-    // scale.tare(); //Reset the scale to 0
-    // long zero_factor = scale.read_average(); //Get a baseline reading
-    // Serial.print("Zero factor: "); //This can be used to remove the need to tare the scale. Useful in permanent scale projects.
-    // Serial.println(zero_factor);
     stateMachineHandler.StartStateMachine();
 }
 
@@ -28,6 +33,4 @@ void loop()
 {
     stateMachineHandler.MainStateMachine();
     wdt_reset();
-    //stateMachineHandler.PressureReading();
 }
-
