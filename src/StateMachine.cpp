@@ -1,5 +1,13 @@
 #include "StateMachine.hpp"
 
+HX711_ADC load_cell_1(LOAD_CELL_SENSOR1, SCK);
+HX711_ADC load_cell_2(LOAD_CELL_SENSOR2, SCK);
+HX711_ADC load_cell_3(LOAD_CELL_SENSOR3, SCK);
+
+Adafruit_MAX31855 thermocouple1(SCK, TEMP_SENSOR1, MISO);
+Adafruit_MAX31855 thermocouple2(SCK, TEMP_SENSOR2, MISO);
+Adafruit_MAX31855 thermocouple3(SCK, TEMP_SENSOR3, MISO);
+
 StateMachineHandler::StateMachineHandler(Adafruit_MCP23X17 expander)
 {
     gpioExpander = expander;
@@ -7,10 +15,7 @@ StateMachineHandler::StateMachineHandler(Adafruit_MCP23X17 expander)
 
 StateMachineHandler::~StateMachineHandler()
 {
-
 }
-
-
 
 // Main state machine
 void StateMachineHandler::MainStateMachine()
@@ -51,7 +56,6 @@ void StateMachineHandler::Update(States state)
     m_currentState = state;
 }
 
-
 void StateMachineHandler::InitializePins()
 {
     //NOTE: TEMPORARILY MADE ALL PINS OUTPUT FOR HARDWARE TESTING
@@ -87,13 +91,11 @@ void StateMachineHandler::InitializePins()
     load_cell_1.setCalFactor(809.03);
     load_cell_2.setCalFactor(836.88);
     load_cell_3.setCalFactor(771.25);
-
 }
 
 // Triggers state machine
 void StateMachineHandler::StartStateMachine()
 {
-    
     // NOTE: TEMPORARILY FOR HARDWARE TESTING
     gpioExpander.digitalWrite(START_PUSHBUTTON_E, HIGH);
     gpioExpander.digitalWrite(SPEAKER_E, HIGH);
@@ -208,8 +210,19 @@ if (IsPressureHandled(INJECTION_SENSOR))
 // Executes the unclamping procedure
 void StateMachineHandler::Unclamping()
 {
-    digitalWrite(EJECTION_CYLINDER_SOLENOID_E, HIGH);
-    Update(States::FINSHED);
+    if (IsPressureHandled(EJECTION_SENSOR))
+    {
+            //injection cylinder
+            digitalWrite(INJECTION_SOLENOID, LOW);
+            delay(1000);
+            //ejection cylinder
+            digitalWrite(EJECTION_SOLENOID, LOW);
+            //some kind of timer
+            delay(1000);
+            //mini little air cylinder
+            digitalWrite(EJECTION_CYLINDER_SOLENOID_E, HIGH);
+            Update(States::FINSHED);
+    }
 }
 
 // Executes the finish procedure

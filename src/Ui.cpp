@@ -1,6 +1,5 @@
 #include "StateMachine.hpp"
 
-
 // Checks if the start button is pressed
 bool StateMachineHandler::IsStartButtonPressed()
 {

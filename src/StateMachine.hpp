@@ -54,15 +54,7 @@ const int LOW_PRESSURE_IN_PSI = 80;
 
 const float PETRI_DISH_WEIGHT = 100; // g, change this later to actual weight
 
-float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
-
-HX711_ADC load_cell_1(LOAD_CELL_SENSOR1, SCK);
-HX711_ADC load_cell_2(LOAD_CELL_SENSOR2, SCK);
-HX711_ADC load_cell_3(LOAD_CELL_SENSOR3, SCK);
-
-Adafruit_MAX31855 thermocouple1(SCK, TEMP_SENSOR1, MISO);
-Adafruit_MAX31855 thermocouple2(SCK, TEMP_SENSOR2, MISO);
-Adafruit_MAX31855 thermocouple3(SCK, TEMP_SENSOR3, MISO);
+const float calibration_factor = 199900; //-7050 worked for my 440lb max scale setup
 
 enum States
 {

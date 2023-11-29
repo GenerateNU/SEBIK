@@ -9,6 +9,7 @@
 // Crystal Oscillator
 #define F_CPU 16000000UL
 
+// Watchdog timer
 #define WATCHDOG_TIMEOUT WDTO_8S
 
 Adafruit_MCP23X17 gpioExpander;
@@ -32,5 +33,4 @@ void loop()
 {
     stateMachineHandler.MainStateMachine();
     wdt_reset();
-    //stateMachineHandler.PressureReading();
 }
