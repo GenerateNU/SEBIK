@@ -20,7 +20,6 @@ StateMachineHandler::~StateMachineHandler()
 // Main state machine
 void StateMachineHandler::MainStateMachine()
 {
-    HandleOverheat();
     switch(m_currentState)
     {
         case START:
