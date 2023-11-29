@@ -153,8 +153,6 @@ class StateMachineHandler
 
         void CompleteLEDOff();
 
-        void HandleOverheat();
-
         bool IsPressureHandled(int pin);
 };
 
