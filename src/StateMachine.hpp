@@ -6,42 +6,41 @@
 #include <Adafruit_MAX31855.h>
 
 // UI pins
-#define START_PUSHBUTTON_E 8
-#define SPEAKER_E 9
-#define HIGH_TEMP_LED_E 0
-#define IN_PROGRESS_LED_E 1
-#define LOW_TEMP_LED_E 2
-#define HIGH_PRESSURE_LED_E 3
-#define COMPLETE_LED_E 4
+#define START_PUSHBUTTON_E 1
+#define SPEAKER_E 2
+#define HIGH_TEMP_LED_E 21
+#define IN_PROGRESS_LED_E 22
+#define LOW_TEMP_LED_E 23
+#define HIGH_PRESSURE_LED_E 24
+#define COMPLETE_LED_E 25
 //#define HARD_STOP_BUTTON_E 7
 
 // Solenoid pins
-#define INJECTION_SOLENOID 8
-#define EJECTION_SOLENOID 7
-#define BALL_VALVE_SOLENOID_E 11
-#define EJECTION_CYLINDER_SOLENOID_E 12
+#define INJECTION_SOLENOID 12
+#define EJECTION_SOLENOID 11
+#define BALL_VALVE_SOLENOID_E 4
+#define EJECTION_CYLINDER_SOLENOID_E 5
 
 // SPI
-#define MISO 12
-#define MOSI 11
-#define SCK 13
+#define MISO 16
+#define MOSI 15
+#define SCK 17
 
 // Sensor pins
-#define TEMP_SENSOR1 10
-#define TEMP_SENSOR2 9
-#define TEMP_SENSOR3 6
-#define INJECTION_SENSOR 17
-#define EJECTION_SENSOR 16
-#define LOAD_CELL_SENSOR1 5
-#define LOAD_CELL_SENSOR2 4
-#define LOAD_CELL_SENSOR3 2
+#define TEMP_SENSOR1 14
+#define TEMP_SENSOR2 13
+#define TEMP_SENSOR3 10
+#define INJECTION_SENSOR 26
+#define EJECTION_SENSOR 25
+#define LOAD_CELL_SENSOR1 9
+#define LOAD_CELL_SENSOR2 2
+#define LOAD_CELL_SENSOR3 32
 
 // Relays
-#define HARD_STOP_RELAY_E 10
-#define HEATER_RELAY 3
-#define AIR_PUMP_RELAY 14
+#define HEATER_RELAY 1
+#define AIR_PUMP_RELAY 23 // Used to be EXTRA1
 
-#define EXTRA2 15
+#define EXTRA2 24
 
 const int HIGH_TEMP_IN_CELSIUS = 175;
 const int OPTIMAL_TEMP_IN_CELSIUS = 165;

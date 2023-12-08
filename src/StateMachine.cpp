@@ -68,7 +68,7 @@ void StateMachineHandler::InitializePins()
     gpioExpander.pinMode(COMPLETE_LED_E, OUTPUT);
     gpioExpander.pinMode(BALL_VALVE_SOLENOID_E, OUTPUT);
     gpioExpander.pinMode(EJECTION_CYLINDER_SOLENOID_E, OUTPUT);
-    gpioExpander.pinMode(HARD_STOP_RELAY_E, OUTPUT);
+    //gpioExpander.pinMode(HARD_STOP_RELAY_E, OUTPUT);
 
     pinMode(INJECTION_SOLENOID, OUTPUT);
     pinMode(EJECTION_SOLENOID, OUTPUT);
@@ -95,36 +95,7 @@ void StateMachineHandler::InitializePins()
 // Triggers state machine
 void StateMachineHandler::StartStateMachine()
 {
-    // NOTE: TEMPORARILY FOR HARDWARE TESTING
-    gpioExpander.digitalWrite(START_PUSHBUTTON_E, HIGH);
-    gpioExpander.digitalWrite(SPEAKER_E, HIGH);
-    gpioExpander.digitalWrite(HIGH_TEMP_LED_E, HIGH);
-    gpioExpander.digitalWrite(IN_PROGRESS_LED_E, HIGH);
-    gpioExpander.digitalWrite(LOW_TEMP_LED_E, HIGH);
-    gpioExpander.digitalWrite(HIGH_PRESSURE_LED_E, HIGH);
-    gpioExpander.digitalWrite(COMPLETE_LED_E, HIGH);
-    gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
-    gpioExpander.digitalWrite(EJECTION_CYLINDER_SOLENOID_E, HIGH);
-    gpioExpander.digitalWrite(HARD_STOP_RELAY_E, HIGH);
-
-    digitalWrite(INJECTION_SOLENOID, HIGH);
-    digitalWrite(EJECTION_SOLENOID, HIGH);
-    digitalWrite(MISO, HIGH);
-    digitalWrite(MOSI, HIGH);
-    digitalWrite(SCK, HIGH);
-    digitalWrite(TEMP_SENSOR1, HIGH);
-    digitalWrite(TEMP_SENSOR2, HIGH);
-    digitalWrite(TEMP_SENSOR3, HIGH);
-    digitalWrite(INJECTION_SENSOR, HIGH);
-    digitalWrite(EJECTION_SENSOR, HIGH);
-    digitalWrite(LOAD_CELL_SENSOR1, HIGH);
-    digitalWrite(LOAD_CELL_SENSOR2, HIGH);
-    digitalWrite(LOAD_CELL_SENSOR3, HIGH);
-    digitalWrite(HEATER_RELAY, HIGH);
-    digitalWrite(AIR_PUMP_RELAY, HIGH);
-    digitalWrite(EXTRA2, HIGH);
-
-    //Update(States::START);
+    Update(States::START);
 }
 
 // Executes start procedure
@@ -141,7 +112,9 @@ void StateMachineHandler::Start()
 // Executes clamping procedure
 void StateMachineHandler::Clamping()
 {
-    m_previous_weight = GetTotalHopperWeight();
+    delay(300);
+    digitalWrite(EJECTION_SOLENOID, LOW);
+    m_previous_weight = GetTotalHopperWeight(); // weight before plastic is dispensed: hopper and plastic
     Update(States::PLASTIC_DISPENSES);
 }
 
@@ -151,16 +124,17 @@ void StateMachineHandler::PlasticDispense()
     float curr_weight = GetTotalHopperWeight();
 
     // Calculates the plastic dispensed by keeping track of the previous and current weight
-    m_plastic_dispensed = m_plastic_dispensed + m_previous_weight - curr_weight;
-    m_previous_weight = curr_weight;
     if (m_plastic_dispensed >= PETRI_DISH_WEIGHT) 
     {
         gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, LOW);
         Update(States::HEATING);
+        m_plastic_dispensed = m_plastic_dispensed - PETRI_DISH_WEIGHT;
     }
     else 
     {
         gpioExpander.digitalWrite(BALL_VALVE_SOLENOID_E, HIGH);
+        m_plastic_dispensed = m_plastic_dispensed + m_previous_weight - curr_weight;
+        m_previous_weight = curr_weight;
     }
 }
 
