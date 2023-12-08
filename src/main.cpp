@@ -7,7 +7,7 @@
 #define BAUD_RATE 115200
 
 // Crystal Oscillator
-#define F_CPU 16000000UL
+//#define F_CPU 16000000UL
 
 // Watchdog timer
 #define WATCHDOG_TIMEOUT WDTO_8S
